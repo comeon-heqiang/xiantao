@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <van-nav-bar title="注册">
+    <van-nav-bar title="登录">
 
     </van-nav-bar>
     <div class="login-form">

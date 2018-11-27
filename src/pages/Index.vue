@@ -24,8 +24,8 @@
     <van-row type="flex" justify="space -between" class="category">
       <van-col span="6" v-for="(item,index) in categoryData" :key="index" v-if="item.isShow">
         <div @click="categoryClick(item)">
-          <!-- <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}} -->
-          <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}}
+          <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}}
+          <!-- <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}} -->
         </div>
       </van-col>
     </van-row>

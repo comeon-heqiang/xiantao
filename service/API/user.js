@@ -57,7 +57,7 @@ router.post("/login", async (ctx) => {
 
     if (result) {
       ctx.cookies.set("userId", result._id, {
-        domain: 'localhost',
+        // domain: 'localhost',
         path: '/', //cookie写入的路径
         maxAge: 1000 * 60 * 60 * 24,
         expires: new Date('2018-10-06'),
@@ -147,7 +147,7 @@ router.post("/login", async (ctx) => {
 // 退出登录
 router.get("/logout", async (ctx) => {
   ctx.cookies.set('userId','',{
-    domain: 'localhost',
+    // domain: 'localhost',
     path: '/',
     maxAge: 0
   })
