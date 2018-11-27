@@ -30,14 +30,15 @@ import {
   Cell,
   CellGroup,
   NoticeBar,
-  Popup 
+  Popup ,
+  DatetimePicker 
 } from 'vant';
 import Vuex from 'vuex'
 Vue.use(Lazyload).use(Toast).use(Dialog).use(Button)
   .use(Icon).use(Row).use(Col)
   .use(Uploader).use(List).use(Swipe).use(SwipeItem).use(NavBar)
   .use(Tabbar).use(TabbarItem).use(AddressEdit).use(AddressList)
-  .use(Area).use(Field).use(Cell).use(CellGroup).use(NoticeBar).use(Popup);
+  .use(Area).use(Field).use(Cell).use(CellGroup).use(NoticeBar).use(Popup).use(DatetimePicker);
 import 'vant/lib/vant-css/index.css';
 Vue.use(Vuex)
 Vue.config.productionTip = false;
