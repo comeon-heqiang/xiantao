@@ -1,0 +1,106 @@
+[{
+    "ID": "1",
+    "NAME": "仙桃",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 1    
+  }, {
+    "ID": "2",
+    "NAME": "彭场镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 2
+  }, {
+    "ID": "3",
+    "NAME": "沙湖镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 3
+  }, {
+    "ID": "4",
+    "NAME": "杨林尾镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 4
+  }, {
+    "ID": "5",
+    "NAME": "张沟镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 5
+  }, {
+    "ID": "6",
+    "NAME": "郭河镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 6
+  }, {
+    "ID": "7",
+    "NAME": "沔城回族镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 7
+  }, {
+    "ID": "8",
+    "NAME": "通海口镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 8
+  },
+  {
+    "ID": "9",
+    "NAME": "陈场镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 9
+  },
+  {
+    "ID": "10",
+    "NAME": "郑场镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 10
+  },
+  {
+    "ID": "11",
+    "NAME": "毛嘴镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 11
+  },
+  {
+    "ID": "12",
+    "NAME": "剅河镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 12
+  },
+  {
+    "ID": "13",
+    "NAME": "三伏潭镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT":13
+  },
+  {
+    "ID": "14",
+    "NAME": "胡场镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 14
+  },
+  {
+    "ID": "15",
+    "NAME": "长埫口镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 15
+  },
+  {
+    "ID": "16",
+    "NAME": "西流河镇",
+    "IMAGE": "",
+    "TYPE": 1,
+    "SORT": 16
+  }
+]

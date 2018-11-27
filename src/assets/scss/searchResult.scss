@@ -1,0 +1,49 @@
+.result {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    li {
+      padding: 10px;
+      width: calc(50% - 5px);
+      box-sizing: border-box;
+      background: #fff;
+      margin-bottom: 10px;
+
+      img {
+        width: 80%;
+        display: block;
+        margin: 0 auto 10px;
+      }
+
+      div {
+
+        h2 {
+          margin: 20px 0;
+          line-height: 1.6;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          font-weight: normal;
+          font-size: 14px;
+        }
+
+        p {
+          color: #f23030;
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+.no-goods{
+    text-align: center;
+    img{
+        display: block;
+        width: 50%;
+        margin: 20% auto 20px;
+    }
+}
