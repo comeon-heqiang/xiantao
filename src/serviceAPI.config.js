@@ -1,5 +1,5 @@
-const LOCALURL = 'http://118.24.219.75:3000/dsSystem/';
-// const LOCALURL = 'http://localhost:3000/';
+// const LOCALURL = 'http://118.24.219.75:3000/dsSystem/';
+const LOCALURL = 'http://localhost:3000/';
 let URL = {
   register: LOCALURL + 'user/register', //用户注册
   login: LOCALURL + 'user/login', //用户登录

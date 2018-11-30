@@ -2,11 +2,34 @@
   <div>
     <nav-bar title="搜索结果"></nav-bar>
     <div class="result">
+      <div
+        v-if="noData"
+        class="no-goods"
+      >
+        <img
+          src="../assets/images/no-goods.png"
+          alt=""
+        >
+        暂无商品 <router-link to="/shop">去商城逛逛吧</router-link>
+      </div>
       <!-- 所有商品 -->
-      <van-list v-model="loading" :finished="finished" @load="onLoad" class="goods-list" v-if="goodsData.length">
+      <van-list
+        v-else
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        class="goods-list"
+      >
         <ul>
-          <li v-for="(item,index) in goodsData" :key="index" @click="goGoodsDetail(item)">
-            <img :src="item.IMAGE1" alt="">
+          <li
+            v-for="(item,index) in goodsData"
+            :key="index"
+            @click="goGoodsDetail(item)"
+          >
+            <img
+              :src="item.IMAGE1"
+              alt=""
+            >
             <div>
               <h2>
                 {{item.NAME}}
@@ -18,10 +41,7 @@
           </li>
         </ul>
       </van-list>
-      <div v-else class="no-goods">
-        <img src="../assets/images/no-goods.png" alt="">
-        暂无商品 <router-link to="/shop">去商城逛逛吧</router-link>
-      </div>
+
     </div>
   </div>
 </template>
@@ -40,6 +60,7 @@ export default {
       loading: false,
       finished: false,
       goodsData: [],
+      noData: false,
       page: 1
     };
   },
@@ -59,7 +80,6 @@ export default {
       })
         .then(response => {
           let res = response.data;
-          console.log(res);
           if (res.code == 200 && res.message.length) {
             this.finished = false;
             this.page++;
@@ -68,6 +88,9 @@ export default {
             this.finished = true;
             // Toast.fail("无数据");
           }
+          if (this.goodsData.length <= 0) {
+            this.noData = true;
+          }
           this.loading = false;
         })
         .catch(err => {
@@ -75,9 +98,8 @@ export default {
           Toast.fail("搜索失败");
         });
     },
-    goGoodsDetail(item){
-      
-      this.$router.push({path:"/goods",query:{goodsId:item.ID}})
+    goGoodsDetail(item) {
+      this.$router.push({ path: "/goods", query: { goodsId: item.ID } });
     },
     onLoad() {
       setTimeout(() => {

@@ -245,9 +245,11 @@ router.get("/getCartCount", async (ctx) => {
         _id: userId
       });
       let count = 0;
-      result.cartList.forEach(item => {
-        count += item.productNum;
-      })
+      if(result){
+        result.cartList.forEach(item => {
+          count += item.productNum;
+        })
+      }     
       ctx.body = info.success(count);
     } catch (error) {
       console.log(error);

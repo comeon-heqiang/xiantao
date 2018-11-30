@@ -5,7 +5,7 @@
     </van-nav-bar>
     <div class="login-form">
       <div class="login-header">
-        <img src="../assets/images/login.jpg" alt="">
+        <img src="../assets/images/login2.jpg" alt="">
       </div>
       <div class="form-group">
         <van-icon name="contact" />
@@ -101,7 +101,7 @@ export default {
 <style scoped lang="scss">
 .login {
   background: url("../assets/images/bg-login.jpg") no-repeat 0 0 /100% 100%;
-  height: 100%;
+  height: 100vh;
 }
 .login-header {
   img {

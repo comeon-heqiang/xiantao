@@ -21,13 +21,14 @@ import Opinion from '@/pages/Opinion'
 import EditUser from '@/pages/editUser'
 import Search from '@/pages/Search'
 import SearchResult from '@/pages/SearchResult'
+import Error404 from '@/pages/404'
 Vue.use(Router);
 import {
   Toast,
   Dialog
 } from 'vant';
 const router = new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [{
       path: "/login",
       name: 'Login',
@@ -77,13 +78,14 @@ const router = new Router({
       name: "Order",
       component: Order,
       beforeEnter: (to, from, next) => {
-        if(from.name=='Pay'){
+        if (from.name == 'Pay') {
           Toast.fail("请勿重复提交订单！");
           setTimeout(() => {
-            next({path:"/cart"})            
+            next({
+              path: "/cart"
+            })
           }, 500);
-        }
-        else{
+        } else {
           next()
         }
       }
@@ -92,6 +94,18 @@ const router = new Router({
       path: '/pay',
       name: "Pay",
       component: Pay,
+      beforeEnter: (to, from, next) => {
+        if (from.name == 'order') {         
+          setTimeout(() => {
+            Toast.fail("请勿重复提交订单")
+            next({
+              path: "/"
+            })
+          }, 500);
+        } else {
+          next()
+        }
+      }
 
     }, {
       path: "/myOrder",
@@ -129,8 +143,16 @@ const router = new Router({
       name: "SearchResult",
       component: SearchResult
     },
+    // 404页面
+    {
+      path: "*",
+      name:"404",
+      component:Error404
+      // redirect: "/"
+    }
   ]
 })
+
 // 全局路由守卫
 router.beforeEach((to, from, next) => {
   let path = to.path; //进入的路由地址

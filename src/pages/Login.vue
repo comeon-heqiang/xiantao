@@ -6,7 +6,7 @@
     <div class="login-form">
       <div class="login-header">
         <img
-          src="../assets/images/login.jpg"
+          src="../assets/images/login2.jpg"
           alt=""
         >
       </div>

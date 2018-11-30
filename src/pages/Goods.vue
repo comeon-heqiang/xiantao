@@ -83,13 +83,13 @@ export default {
   },
   computed: {
     CartCount() {
-      return this.$store.state.cartCount;
+      return this.$store.getters.getCartTotal;
     }
   },
   created() {
     this.goodsId = this.$route.query.goodsId;
     this.getGoods();
-    this.getcartCount();
+    this.$store.dispatch("getCartCount");
   },
   methods: {
     // 获取商品信息
@@ -126,7 +126,7 @@ export default {
             console.log(res);
             if (res.data.code == 200 && res.data.message) {
               Toast.success("加入购物车成功");
-              this.getcartCount();
+              this.$store.dispatch("getCartCount");
             }
           })
           .catch(err => {
@@ -146,19 +146,6 @@ export default {
           .catch(err => {});
         // Toast.fail('请登录后加入购物车')
       }
-    },
-    getcartCount() {
-      axios({
-        url: url.getCartCount,
-        method: "get",
-        withCredentials: true
-      }).then(res => {
-        if (res.data.code == 200 && res.data.message) {
-          this.$store.commit("initCartCount", res.data.message);
-        } else {
-          this.$store.commit("initCartCount", 0);
-        }
-      });
     },
     // 立即购买
     buy() {},

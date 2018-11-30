@@ -6,7 +6,10 @@
       <!-- 收货地址列表 -->
       <div class="address-list">
         <ul>
-          <li v-for="(item,index) in addressList" :key="index">
+          <li
+            v-for="(item,index) in addressList"
+            :key="index"
+          >
             <div class="detail">
               {{item.userName}}
               <p class="tel">
@@ -18,8 +21,18 @@
             </div>
             <div class="edit">
               <div class="checked">
-                <van-icon name="passed" class="icon-checked" @click="setDefault(item)" v-if="item.isDefault"></van-icon>
-                <van-icon name="check" class="icon-checked icon-no-checked" @click="setDefault(item)" v-else></van-icon>
+                <van-icon
+                  name="passed"
+                  class="icon-checked"
+                  @click="setDefault(item)"
+                  v-if="item.isDefault"
+                ></van-icon>
+                <van-icon
+                  name="check"
+                  class="icon-checked icon-no-checked"
+                  @click="setDefault(item)"
+                  v-else
+                ></van-icon>
                 默认地址
               </div>
               <p @click="editAddress(item)">
@@ -31,16 +44,37 @@
             </div>
           </li>
         </ul>
-        <van-button type="danger" class="addAddress" @click="editAddress()">新增收货地址</van-button>
+        <van-button
+          type="danger"
+          class="addAddress"
+          @click="editAddress()"
+        >新增收货地址</van-button>
       </div>
       <!-- 编辑地址弹窗 -->
-      <van-dialog v-model="dialogShow" :show-cancel-button="false" :closeOnClickOverlay="true" :showConfirmButton="false">
-        <van-address-edit :area-list="areaList" :address-info="addressInfo" show-postal show-set-default @save="onSave" />
+      <van-dialog
+        v-model="dialogShow"
+        :show-cancel-button="false"
+        :closeOnClickOverlay="true"
+        :showConfirmButton="false"
+      >
+        <van-address-edit
+          :area-list="areaList"
+          :address-info="addressInfo"
+          show-postal
+          show-set-default
+          @save="onSave"
+        />
       </van-dialog>
     </template>
-    <div v-else class="no-login">
+    <div
+      v-else
+      class="no-login"
+    >
       请登录后查看订单
-      <van-button type="danger" @click="goLogin">去登录</van-button>
+      <van-button
+        type="danger"
+        @click="goLogin"
+      >去登录</van-button>
     </div>
   </div>
 </template>
@@ -67,8 +101,8 @@ export default {
     NavBar
   },
   mounted() {
+    this.isLogin = this.getLoginStatus();
     this.getAddress();
-    this.isLogin = loginStatus;
   },
   methods: {
     // 获取收货地址
@@ -199,6 +233,10 @@ export default {
           this.$toast.fail(err);
         });
     },
+      // 获取cookie
+    getLoginStatus() {
+      return document.cookie.indexOf("userId") > -1 ? true : false;
+    },
     goLogin() {
       this.$router.push("/login");
     }
@@ -283,12 +321,12 @@ export default {
   width: 63%;
   margin: 30px auto;
 }
-.no-login{
+.no-login {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 30px 0;
-  button{
+  button {
     margin-top: 20px;
   }
 }

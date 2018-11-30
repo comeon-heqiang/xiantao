@@ -2,28 +2,45 @@
   <div>
 
     <van-tabbar v-model="active">
-      <van-tabbar-item icon="home" to="/">
+      <van-tabbar-item
+        icon="home"
+        to="/"
+      >
         首页
       </van-tabbar-item>
-      <van-tabbar-item icon="shop" to="/shop">
+      <van-tabbar-item
+        icon="shop"
+        to="/shop"
+      >
         商品
       </van-tabbar-item>
-      <van-tabbar-item icon="cart" to="/cart">
+      <van-tabbar-item
+        icon="cart"
+        to="/cart"
+      >
         购物车
-        <div class="cart-count" v-if="cartCount>0">
+        <div
+          class="cart-count"
+          v-if="cartCount>0"
+        >
           {{cartCount}}
         </div>
       </van-tabbar-item>
-      <van-tabbar-item icon="location" to="/region">
+      <van-tabbar-item
+        icon="location"
+        to="/region"
+      >
         地区
       </van-tabbar-item>
-      <van-tabbar-item icon="contact" to="/userCenter">
+      <van-tabbar-item
+        icon="contact"
+        to="/userCenter"
+      >
         个人中心
       </van-tabbar-item>
     </van-tabbar>
     <router-view></router-view>
 
-    
   </div>
 </template>
 
@@ -38,11 +55,11 @@ export default {
   },
   computed: {
     cartCount() {
-      return this.$store.state.cartCount;
+      return this.$store.getters.getCartTotal;
     }
   },
-  created() {   
-    let path = this.$route.path;    
+  created() {
+    let path = this.$route.path;
     switch (path) {
       case "/":
         this.active = 0;
@@ -58,65 +75,66 @@ export default {
         break;
       case "/userCenter":
         this.active = 4;
-        break;    
+        break;
     }
+    this.$store.dispatch("getCartCount");
   },
-  watch:{
-    $route(to,from){
-    
+  watch: {
+    $route(to, from) {
       switch (to.path) {
-      case "/":
-        this.active = 0;
-        break;
-      case "/shop":
-        this.active = 1;
-        break;
-      case "/cart":
-        this.active = 2;
-        break;
-      case "/region":
-        this.active = 3;
-        break;
-      case "/userCenter":
-        this.active = 4;
-        break;    
-    }
+        case "/":
+          this.active = 0;
+          break;
+        case "/shop":
+          this.active = 1;
+          break;
+        case "/cart":
+          this.active = 2;
+          break;
+        case "/region":
+          this.active = 3;
+          break;
+        case "/userCenter":
+          this.active = 4;
+          break;
+      }
     }
   },
   mounted() {
-    this.getcartCount();    
+    // this.getcartCount();
   },
   methods: {
-    getcartCount() {
-      axios({
-        url: url.getCartCount,
-        method: "get",
-        withCredentials: true
-      }).then(res => {
-        if (res.data.code == 200 && res.data.message) {
-          this.$store.commit("initCartCount", res.data.message);
-        } else {
-          this.$store.commit("initCartCount", 0);
-        }
-      });
-    }
+    // 获取购物车数量，现改为vuex
+    // getcartCount() {
+    //   axios({
+    //     url: url.getCartCount,
+    //     method: "get",
+    //     withCredentials: true
+    //   }).then(res => {
+    //     if (res.data.code == 200 && res.data.message) {
+    //       this.$store.commit("initCartCount", res.data.message);
+    //     } else {
+    //       this.$store.commit("initCartCount", 0);
+    //     }
+    //   });
+    // }
   }
 };
 </script>
 
 <style scoped lang='scss'>
-.van-tabbar-item{
+.van-tabbar-item {
   position: relative;
 }
-.cart-count{
-    position: absolute;
-    top: 6%;
-    right: 22%;
-    width: 20px;
-    line-height: 20px;
-    text-align: center;
-    border-radius: 50%;
-    background: red;
-    color: #fff;
+.cart-count {
+  position: absolute;
+  top: 6%;
+  right: 22%;
+  width: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  background: red;
+  color: #fff;
 }
 </style>
