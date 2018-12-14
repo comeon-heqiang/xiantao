@@ -24,15 +24,15 @@
     <van-row type="flex" justify="space -between" class="category">
       <van-col span="6" v-for="(item,index) in categoryData" :key="index" v-if="item.isShow">
         <div @click="categoryClick(item)">
-          <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}}
-          <!-- <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}} -->
+          <!-- <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}} -->
+          <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}}
         </div>
       </van-col>
     </van-row>
 
     <div class="title">商品专区
       <router-link to="/shop">查看更多</router-link>
-    </div>
+    </div>    
     <!-- 所有商品 -->
     <van-list v-model="loading" :finished="finished" @load="onLoad" class="goods-list">
       <ul>

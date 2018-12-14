@@ -12,6 +12,9 @@ Vue.use(Vant)
 Vue.use(Vuex)
 Vue.config.productionTip = false;
 
+const cart = {
+  
+}
 
 const store = new Vuex.Store({
   state: {

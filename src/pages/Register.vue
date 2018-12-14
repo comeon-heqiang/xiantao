@@ -5,24 +5,69 @@
     </van-nav-bar>
     <div class="login-form">
       <div class="login-header">
-        <img src="../assets/images/login2.jpg" alt="">
+        <img
+          src="../assets/images/xiaowo.jpg"
+          alt=""
+        >
       </div>
       <div class="form-group">
         <van-icon name="contact" />
-        <input type="text" v-model="userName" placeholder="请输入您的账号">
+        <input
+          type="text"
+          v-model="userName"
+          placeholder="请输入您的账号"
+        >
         <p v-if="userNameErrMsg">
           {{userNameErrMsg}}
         </p>
       </div>
       <div class="form-group">
         <van-icon name="password-not-view" />
-        <input type="password" v-model="password" placeholder="请输入您的密码">
+        <input
+          type="password"
+          v-model="password"
+          placeholder="请输入您的密码"
+        >
         <p v-if="passwordErrMsg">
           {{passwordErrMsg}}
         </p>
       </div>
-      <van-button type="danger" @click="loginAction" :loading="openLoading" size="large">马上注册</van-button>
-      <!-- <button class="submit" @click="loginAction">注册</button> -->
+      <div class="form-group">
+        <van-icon name="location" />
+        <input
+          type="text"
+          v-model="email"
+          placeholder="请输入邮箱地址"
+        >
+        <van-button
+          type="primary"
+          size="small"
+          :disabled="codeDisabled"
+          class="btn-code"
+          @click="sendCode"
+        >{{codeText}}</van-button>
+        <p v-if="emailErrMsg">
+          {{emailErrMsg}}
+        </p>
+      </div>
+      <!-- <span class="tip">警告:如果未填写邮箱地址,无法找回密码,请知悉！</span> -->
+      <div class="form-group">
+        <van-icon name="pending-orders" />
+        <input
+          type="text"
+          v-model="code"
+          placeholder="请填写邮箱验证码"
+        >
+        <p v-if="codeErrMsg">
+          {{codeErrMsg}}
+        </p>
+      </div>
+      <van-button
+        type="danger"
+        @click="loginAction"
+        :loading="openLoading"
+        size="large"
+      >注册</van-button>
     </div>
     <div class="tips">
       已有用户名?
@@ -38,10 +83,17 @@ import { Toast } from "vant";
 export default {
   data() {
     return {
+      codeText: "发送验证码",
+      codeDisabled: false,
       userName: "",
       password: "",
+      code: "", //验证码
+      serverCode: "", //服务端返回的验证码
+      email: "",
+      emailErrMsg: "",
       userNameErrMsg: "",
       passwordErrMsg: "",
+      codeErrMsg: "",
       openLoading: false
     };
   },
@@ -57,7 +109,8 @@ export default {
         method: "post",
         data: {
           userName: this.userName,
-          password: this.password
+          password: this.password,
+          email: this.email
         }
       })
         .then(response => {
@@ -92,70 +145,67 @@ export default {
       } else {
         this.passwordErrMsg = "";
       }
+      // 判断验证码与服务端返回的验证码
+      if (this.code != this.serverCode) {
+        this.codeErrMsg = "验证码错误";
+        isOk = false;
+      } else {
+        this.codeErrMsg = "";
+      }
+      if (!this.code) {
+        this.codeErrMsg = "验证码不能为空";
+      } else {
+        this.codeErrMsg = "";
+      }
       return isOk;
+    },
+    // 发送验证码
+    sendCode() {
+      if (!this.userEmail) {
+        Toast.fail("请填写邮箱");
+        return false;
+      }
+      axios({
+        url: url.sendCode,
+        method: "POST",
+        data: {
+          email: this.userEmail
+        }
+      })
+        .then(response => {
+          let res = response.data;
+          if (res.code == 200 && res.message) {
+            this.serverCode = res.message;
+          }
+        })
+        .catch(err => {
+          Toast.fail("验证码发送失败");
+          console.log(err);
+        });
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+@import "../assets/scss/login.scss";
 .login {
-  background: url("../assets/images/bg-login.jpg") no-repeat 0 0 /100% 100%;
-  height: 100vh;
+  background: url(../assets/images/bg3.jpg) no-repeat 0 0/100% 100%;
 }
-.login-header {
-  img {
-    display: block;
-    margin: 0 auto 30px;
-    border-radius: 50%;
-    width: 50%;
-  }
+.tip {
+  font-size: 12px;
+  color: #ff4a4a;
+  position: relative;
+  top: -15px;
 }
 .login-form {
-  background: rgba(233, 244, 251, 0.8);
-  margin: 30px 30px 15px;
-  border-radius: 5px;
-  padding: 30px 20px;
   .form-group {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 50px;
-    align-items: center;
-    padding: 0 20px;
-    margin-bottom: 30px;
-    position: relative;
-  }
-  p {
-    position: absolute;
-    right: 0;
-    left: 0;
-    color: #ff6a4c;
-    top: 100%;
-    padding-left: 56px;
-    line-height: 30px;
-  }
-  input {
-    border: 0;
-    background: none;
-    flex: 1;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding: 10px 10px 10px 20px;
+    margin-bottom: 20px;
   }
 }
-.submit {
-  width: 100%;
-  border: 1px solid #ff6a4c;
-  background: #ff6a4c;
-  color: #fff;
-  padding: 7px 0;
-  border-radius: 30px;
-}
-.tips {
-  color: #fff;
-  padding: 0 30px;
-}
-.tips a {
-  color: #ff6a4c;
+.btn-code {
+  box-sizing: border-box;
+  line-height: 24px;
+  height: 24px;
 }
 </style>

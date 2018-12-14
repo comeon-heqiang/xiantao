@@ -3,7 +3,9 @@ const router = require("koa-router")();
 let info = require("../middlewares/info");
 let Util = require("../util/util");
 const multer = require('koa-multer');
-const path = require("path")
+const path = require("path");
+let sendEmail = require('../util/sendEmail')
+var RandomCode = ""
 // const upload = multer({ dest: './upload/' });
 // 配置图片上传
 let storage = multer.diskStorage({
@@ -40,6 +42,25 @@ router.post("/register", async (ctx) => {
     }
   })
 })
+
+// 发送验证码
+router.post("/sendCode", async (ctx) => {
+  RandomCode = Math.ceil(Math.random() * 10000 + 1) //获得随机验证码
+  let email = ctx.request.body.email;
+  let html = "验证码为:" + RandomCode;
+
+  //发送邮件
+  let res = sendEmail(email, html, "注册账号");
+  res.then(res => {
+    console.log(res)
+    ctx.body = info.success(RandomCode)
+  }).catch(err => {
+    ctx.body = info.err("发送失败")
+  })
+  ctx.body = info.success(RandomCode)
+})
+
+
 
 // 用户登录
 router.post("/login", async (ctx) => {
@@ -146,7 +167,7 @@ router.post("/login", async (ctx) => {
 })
 // 退出登录
 router.get("/logout", async (ctx) => {
-  ctx.cookies.set('userId','',{
+  ctx.cookies.set('userId', '', {
     // domain: 'localhost',
     path: '/',
     maxAge: 0
@@ -214,7 +235,7 @@ router.post('/goodsCheck', async (ctx) => {
 // 购物车全选与取消全选
 router.post('/checkAll', async (ctx) => {
   let checkAllFlag = ctx.request.body.checkAllFlag ? 1 : 0;
-  let userId = ctx.cookies.get("userId")  
+  let userId = ctx.cookies.get("userId")
   const UserModel = mongoose.model('User');
 
   try {
@@ -245,11 +266,11 @@ router.get("/getCartCount", async (ctx) => {
         _id: userId
       });
       let count = 0;
-      if(result){
+      if (result) {
         result.cartList.forEach(item => {
           count += item.productNum;
         })
-      }     
+      }
       ctx.body = info.success(count);
     } catch (error) {
       console.log(error);
@@ -275,7 +296,7 @@ router.post("/delGoods", async (ctx) => {
         }
       }
     });
-    
+
     ctx.body = info.success("删除成功")
   } catch (error) {
     console.log(error);
@@ -371,7 +392,7 @@ router.post("/editAddress", async (ctx) => {
   // let addressDetail = [addressInfo.province, addressInfo.city, addressInfo.county, addressInfo.addressDetail].join('-');
   let userId = ctx.cookies.get("userId");
   const userModel = mongoose.model("User");
-  
+
   try {
     if (addressInfo.isDefault) {
       let result2 = await userModel.findOne({
@@ -456,7 +477,7 @@ router.post('/pay', async (ctx) => {
     var platForm = '932';
     var r1 = Math.floor(Math.random() * 10);
     var r2 = Math.floor(Math.random() * 10);
-    var sysDate = new Date().Format('yyyyMMddhhmmss');    
+    var sysDate = new Date().Format('yyyyMMddhhmmss');
     var orderId = platForm + r1 + sysDate + r2;
     let order = {
       orderId: orderId,
@@ -464,7 +485,7 @@ router.post('/pay', async (ctx) => {
       addressInfo: addressInfo,
       goodsList: goodsList,
       orderStatus: "1",
-      createDate:new Date().Format('yyyy-MM-dd hh:mm:ss')
+      createDate: new Date().Format('yyyy-MM-dd hh:mm:ss')
     }
     result.orderList.push(order);
     await result.save().then(res => {
@@ -541,7 +562,7 @@ router.post('/delOrder', async (ctx) => {
 //上传头像 要注意filename要和前端的表单元素的name一致
 router.post('/upload', upload.single('file'), async (ctx) => {
 
-  ctx.body = info.success('http://118.24.219.75/upload/' + ctx.req.file.filename);  
+  ctx.body = info.success('http://118.24.219.75/upload/' + ctx.req.file.filename);
   //originalname 源文件名称，path上传后文件的临时路径，mimetype文件类型
   // { fieldname: 'file',
   // originalname: 'bg-brand2.jpg',
@@ -553,7 +574,7 @@ router.post('/upload', upload.single('file'), async (ctx) => {
   // size: 108989 }
 })
 // 编辑用户资料
-router.post('/editUserInfo', async (ctx) => {  
+router.post('/editUserInfo', async (ctx) => {
   let userInfo = ctx.request.body.userInfo;
   let userId = ctx.cookies.get('userId');
   const userModel = mongoose.model('User');
