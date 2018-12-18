@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"xiantao.users"},{"v":2,"unique":true,"key":{"userName":1},"name":"userName_1","ns":"xiantao.users","background":true}]}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"xiantao.users"}]}

@@ -4,8 +4,8 @@ let info = require("../middlewares/info");
 let Util = require("../util/util");
 const multer = require('koa-multer');
 const path = require("path");
+let CryptoJs = require("../util/crypto")
 let sendEmail = require('../util/sendEmail')
-var RandomCode = ""
 // const upload = multer({ dest: './upload/' });
 // 配置图片上传
 let storage = multer.diskStorage({
@@ -27,7 +27,9 @@ var upload = multer({
 // 用户注册
 router.post("/register", async (ctx) => {
   const UserModel = mongoose.model('User');
+  ctx.request.body.password = CryptoJs.get(ctx.request.body.password)
   let user = new UserModel(ctx.request.body);
+
   await user.save().then(() => {
     ctx.body = {
       code: 200,
@@ -43,23 +45,65 @@ router.post("/register", async (ctx) => {
   })
 })
 
-// 发送验证码
+
+
+// 发送邮箱验证码
 router.post("/sendCode", async (ctx) => {
-  RandomCode = Math.ceil(Math.random() * 10000 + 1) //获得随机验证码
-  let email = ctx.request.body.email;
+  let RandomCode = Math.ceil(Math.random() * 10000 + 1000) //获得4位随机验证码
+  let {
+    email,
+    register
+  } = ctx.request.body;
   let html = "验证码为:" + RandomCode;
-
+  const userModel = mongoose.model("User");
+  // 如果是注册页面 首先判断邮箱是否存在
+  if (register) {
+    let result = await userModel.findOne({
+      email: email
+    })
+    if (result) {
+      ctx.body = info.success("exist")
+    }
+  }
   //发送邮件
-  let res = sendEmail(email, html, "注册账号");
-  res.then(res => {
-    console.log(res)
-    ctx.body = info.success(RandomCode)
-  }).catch(err => {
-    ctx.body = info.err("发送失败")
-  })
-  ctx.body = info.success(RandomCode)
-})
+  try {
+    let res = await sendEmail(email, html, "注册账号");
+    if (!res) {
+      ctx.body = info.err(res)
+    } else {
+      ctx.body = info.success(RandomCode)
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body = info.err(error)
+  }
 
+
+})
+// 修改密码
+router.post("/editPassword", async (ctx) => {
+  let {
+    email,
+    password
+  } = ctx.request.body;
+
+  let userModel = mongoose.model("User");
+  try {
+    let result = await userModel.updateOne({
+      "email": email
+    }, {
+      $set: {
+        "password": password
+      }
+    });
+    ctx.body = info.success("success")
+  } catch (error) {
+    console.log(error)
+    ctx.body = info.err('error')
+  }
+
+
+})
 
 
 // 用户登录
@@ -68,6 +112,9 @@ router.post("/login", async (ctx) => {
     userName,
     password
   } = ctx.request.body; //接收客户端传递的数据
+
+  password = CryptoJs.get(password) //对密码解密
+
   const userModel = mongoose.model("User");
   //根据用户名判断数据是否存在
   try {
@@ -172,7 +219,6 @@ router.get("/logout", async (ctx) => {
     path: '/',
     maxAge: 0
   })
-  console.log(ctx.cookies.get('userId'));
   ctx.body = info.success("success")
 })
 //获取用户信息

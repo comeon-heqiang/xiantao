@@ -5,39 +5,80 @@
     <div class="search-wrap">
       <div class="search">
         <van-icon name="search"></van-icon>
-        <input type="text" placeholder="请输入搜索内容" @click="toSearch">
+        <input
+          type="text"
+          placeholder="请输入搜索内容"
+          @click="toSearch"
+        >
       </div>
     </div>
     <!-- </div> -->
     <!-- 新闻资讯 -->
     <div class="news">
-      <van-notice-bar text="江南皮革厂倒闭了，老板带着小姨了跑了，全场29元！29元你买不了吃亏，买不了上当！先到先选，量大从优！" mode="closeable" :speed="30" left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" />
+      <van-notice-bar
+        text="江南皮革厂倒闭了，老板带着小姨了跑了，全场29元！29元你买不了吃亏，买不了上当！先到先选，量大从优！"
+        mode="closeable"
+        :speed="30"
+        left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png"
+      />
     </div>
-    <van-swipe :autoplay="3000" class="banner">
-      <van-swipe-item v-for="(item,index) in bannerList" :key="index" class="swiper-item">
+    <van-swipe
+      :autoplay="3000"
+      class="banner"
+    >
+      <van-swipe-item
+        v-for="(item,index) in bannerList"
+        :key="index"
+        class="swiper-item"
+      >
         <!-- <img v-lazy="item.src" alt=""> -->
-        <img :src="item.src" alt="">
+        <img
+          :src="item.src"
+          alt=""
+        >
         <p>{{item.intro}}</p>
       </van-swipe-item>
     </van-swipe>
     <!-- 类别栏目 -->
-    <van-row type="flex" justify="space -between" class="category">
-      <van-col span="6" v-for="(item,index) in categoryData" :key="index" v-if="item.isShow">
+    <van-row
+      type="flex"
+      justify="space -between"
+      class="category"
+    >
+      <van-col
+        span="6"
+        v-for="(item,index) in categoryData"
+        :key="index"
+        v-if="item.isShow"
+      >
         <div @click="categoryClick(item)">
-          <!-- <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}} -->
-          <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}}
+          <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}}
+          <!-- <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}} -->
         </div>
+        mongorestore -h 192.168.17.129:27017 -d itcast_restore --dir /home/mongodump/itcast/
       </van-col>
     </van-row>
 
     <div class="title">商品专区
       <router-link to="/shop">查看更多</router-link>
-    </div>    
+    </div>
     <!-- 所有商品 -->
-    <van-list v-model="loading" :finished="finished" @load="onLoad" class="goods-list">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      @load="onLoad"
+      class="goods-list"
+    >
       <ul>
-        <li v-for="(item,index) in goodsData" :key="index" @click="goGoodsDetail(item)">
-          <img :src="item.IMAGE1" alt="">
+        <li
+          v-for="(item,index) in goodsData"
+          :key="index"
+          @click="goGoodsDetail(item)"
+        >
+          <img
+            :src="item.IMAGE1"
+            alt=""
+          >
           <h2>
             {{item.NAME}}
           </h2>
@@ -139,7 +180,7 @@ export default {
       this.$router.push({ path: "/search" });
     },
     // 栏目点击跳转
-    categoryClick(item) {   
+    categoryClick(item) {
       this.$router.push({ name: "Shop", params: { categoryID: item.id } });
     }
   },
@@ -150,120 +191,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.banner {
-  // margin-top: 50px;
-}
-.search-fix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  box-sizing: border-box;
-}
-.search-wrap {
-  padding: 10px;
-  background: #fdcf1b;
-  display: flex;
-  align-items: center;
-}
-.search {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  background: #fff;
-  padding: 0 10px;
-  margin-right: 10px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px #ccc;
-  input {
-    height: 30px;
-    border: 0;
-    line-height: 30px;
-    background: none;
-    flex: 1;
-    padding-left: 5px;
-  }
-}
-.swiper-item {
-  position: relative;
-  img {
-    display: block;
-    width: 100%;
-  }
-  p {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    line-height: 30px;
-  }
-}
-.category {
-  text-align: center;
-
-  background: #fff;
-  padding-bottom: 20px;
-  & > div {
-    margin-top: 20px;
-  }
-  img {
-    display: block;
-    width: 60%;
-    margin: 0 auto 5px;
-  }
-}
-.goods-list {
-  margin: 0 15px 50px;
-
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  li {
-    background: #fff;
-    width: 49%;
-    margin-bottom: 2%;
-    padding: 10px;
-    box-sizing: border-box;
-    img {
-      display: block;
-      margin: 0 auto 10px;
-      width: 70%;
-    }
-    h2 {
-      font-weight: normal;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      font-size: 13px;
-      height: 36px;
-      line-height: 18px;
-    }
-    p {
-      margin-top: 5px;
-      font-weight: bold;
-      color: #f23030;
-    }
-  }
-}
-.title {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 15px;
-  color: #333;
-  font-size: 16px;
-  a {
-    font-size: 14px;
-    color: #666;
-  }
-}
+@import "../assets/scss/index.scss";
 </style>

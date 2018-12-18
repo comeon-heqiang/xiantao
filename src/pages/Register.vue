@@ -42,15 +42,13 @@
         <van-button
           type="primary"
           size="small"
-          :disabled="codeDisabled"
           class="btn-code"
           @click="sendCode"
-        >{{codeText}}</van-button>
+        >{{sendcodeText}}</van-button>
         <p v-if="emailErrMsg">
           {{emailErrMsg}}
         </p>
       </div>
-      <!-- <span class="tip">警告:如果未填写邮箱地址,无法找回密码,请知悉！</span> -->
       <div class="form-group">
         <van-icon name="pending-orders" />
         <input
@@ -79,12 +77,13 @@
 <script>
 import axios from "axios";
 import url from "@/serviceAPI.config.js";
-import { Toast } from "vant";
+import crypto from "@/util/crypto";
+import { Toast, Dialog } from "vant";
+
 export default {
   data() {
     return {
-      codeText: "发送验证码",
-      codeDisabled: false,
+      sendcodeText: "获取验证码",
       userName: "",
       password: "",
       code: "", //验证码
@@ -94,8 +93,12 @@ export default {
       userNameErrMsg: "",
       passwordErrMsg: "",
       codeErrMsg: "",
-      openLoading: false
+      openLoading: false,
+      timer: ""
     };
+  },
+  created() {
+    clearInterval(this.timer);
   },
   methods: {
     loginAction() {
@@ -109,19 +112,17 @@ export default {
         method: "post",
         data: {
           userName: this.userName,
-          password: this.password,
+          password:crypto.set(this.password),
           email: this.email
         }
       })
-        .then(response => {
-          console.log(response);
+        .then(response => {          
           if (response.data.code == 200 && response.data.message) {
             Toast.success("注册成功");
             this.$router.push("/login");
           } else {
             console.log(response.data.message);
             Toast.fail("注册失败,用户名重复");
-
             this.openLoading = false;
           }
         })
@@ -134,6 +135,7 @@ export default {
     // 表单验证
     checkForm() {
       let isOk = true;
+      console.log(this.code);
       if (this.userName.length < 5) {
         this.userNameErrMsg = "用户名不得少于5位";
         isOk = false;
@@ -146,36 +148,62 @@ export default {
         this.passwordErrMsg = "";
       }
       // 判断验证码与服务端返回的验证码
-      if (this.code != this.serverCode) {
+      if (!this.code || this.code != this.serverCode) {
         this.codeErrMsg = "验证码错误";
         isOk = false;
       } else {
         this.codeErrMsg = "";
       }
-      if (!this.code) {
-        this.codeErrMsg = "验证码不能为空";
+      if (!this.email) {
+        this.emailErrMsg = "邮箱不能为空";
+        isOk = false;
       } else {
-        this.codeErrMsg = "";
+        this.emailErrMsg = "";
       }
       return isOk;
     },
     // 发送验证码
     sendCode() {
-      if (!this.userEmail) {
-        Toast.fail("请填写邮箱");
+      if (!this.email) {
+        Toast.fail("请输入邮箱");
         return false;
       }
+      if (this.sendcodeText != "获取验证码") {
+        return false;
+      }
+      let time = 30;
+      this.sendcodeText = "再次获取(" + time + "s)";
+      this.timer = setInterval(() => {
+        if (time > 0) {
+          time--;
+          this.sendcodeText = "再次获取(" + time + "s)";
+        } else {
+          clearInterval(this.timer);
+          this.sendcodeText = "获取验证码";
+        }
+      }, 1000);
+
       axios({
         url: url.sendCode,
         method: "POST",
         data: {
-          email: this.userEmail
+          email: this.email,
+          register: true
         }
       })
         .then(response => {
           let res = response.data;
-          if (res.code == 200 && res.message) {
+          console.log(response);
+          if (res.code == 200 && res.message != "exist") {
             this.serverCode = res.message;
+          } else if (res.code == 200 && res.message == "exist") {
+            clearInterval(this.timer);
+            this.sendcodeText = "获取验证码";
+            Toast.fail("邮箱已经注册,请重新输入邮箱");
+          } else {
+            clearInterval(this.timer);
+            this.sendcodeText = "获取验证码";
+            Toast.fail("邮件发送失败,请检查邮箱地址是否正确");
           }
         })
         .catch(err => {

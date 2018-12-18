@@ -22,6 +22,7 @@ import EditUser from '@/pages/editUser'
 import Search from '@/pages/Search'
 import SearchResult from '@/pages/SearchResult'
 import Error404 from '@/pages/404'
+import forgotPassword from '@/pages/forgotPassword'
 Vue.use(Router);
 import {
   Toast,
@@ -37,6 +38,11 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path:"/forgotPassword",
+      name:"ForgotPassword",
+      component:forgotPassword
     },
     {
       path: '/goods',
@@ -95,7 +101,7 @@ const router = new Router({
       name: "Pay",
       component: Pay,
       beforeEnter: (to, from, next) => {
-        if (from.name == 'order') {         
+        if (from.name == 'order') {
           setTimeout(() => {
             Toast.fail("请勿重复提交订单")
             next({
@@ -146,8 +152,8 @@ const router = new Router({
     // 404页面
     {
       path: "*",
-      name:"404",
-      component:Error404
+      name: "404",
+      component: Error404
       // redirect: "/"
     }
   ]

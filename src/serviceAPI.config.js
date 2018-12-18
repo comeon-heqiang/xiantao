@@ -1,10 +1,11 @@
-// const LOCALURL = 'http://118.24.219.75:3000/dsSystem/';
-const LOCALURL = 'http://localhost:3000/';
+const LOCALURL = 'http://118.24.219.75:3000/dsSystem/';
+// const LOCALURL = 'http://localhost:3000/';
 let URL = {
   register: LOCALURL + 'user/register', //用户注册
   login: LOCALURL + 'user/login', //用户登录
   logout: LOCALURL + 'user/logout', //退出登录
   sendCode: LOCALURL + 'user/sendCode', //发送邮箱验证码
+  editPassword: LOCALURL + 'user/editPassword', //修改密码
   getUserInfo: LOCALURL + "user/getUserInfo", //获取用户信息
   getAllOrder: LOCALURL + "user/getAllOrder", //获取订单
   delOrder: LOCALURL + 'user/delOrder', //删除订单

@@ -7,7 +7,7 @@
           头像：
         </p>
         <div class="user-thumb" v-if="userInfo.userPic">
-          <img :src="'http://118.24.219.75/upload/'+userInfo.userPic" v-if="userInfo.userPic">
+          <img :src="userInfo.userPic" v-if="userInfo.userPic">
           <img src="../assets/images/userPic.png" v-else>
         </div>
         <!-- VueCoreImageUpload -->

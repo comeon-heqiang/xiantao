@@ -56,5 +56,9 @@
     padding: 0 30px;
   }
   .tips a {
-    color: #ff6a4c;
+    color: #fff266;
+    &:last-child{
+      display: inline-block;
+      margin-left: 10px;
+    }
   }

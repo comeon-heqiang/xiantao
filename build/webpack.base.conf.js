@@ -78,5 +78,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  // 加密
+  externals: {
+    'crypto':'Crypto',
+  },
 }

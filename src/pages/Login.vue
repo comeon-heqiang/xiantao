@@ -43,6 +43,8 @@
     <div class="tips">
       没有用户名?
       <router-link to="/register">去注册</router-link>
+      <router-link to="/forgotPassword">忘记密码?</router-link>
+
     </div>
   </div>
 </template>
@@ -52,6 +54,7 @@ import axios from "axios";
 import url from "@/serviceAPI.config.js";
 import { Toast } from "vant";
 import loginStatus from "../util/isLogin.js";
+import crypto from "@/util/crypto";
 export default {
   data() {
     return {
@@ -82,13 +85,13 @@ export default {
     },
     // 服务端验证用户名密码
     Login() {
-      this.openLoading = true;
+      this.openLoading = true;   
       axios({
         url: url.login,
         method: "post",
         data: {
           userName: this.userName,
-          password: this.password
+          password: crypto.set(this.password) //对密码进行加密
         },
         withCredentials: true
       })
@@ -101,7 +104,7 @@ export default {
               resolve();
             })
               .then(res => {
-                Toast.success("登录成功");
+                Toast.success("登录成功");                
                 setTimeout(() => {
                   this.$router.push("/");
                 }, 500);
@@ -138,7 +141,7 @@ export default {
       }
       return isOk;
     },
-   // 获取cookie
+    // 获取cookie
     getLoginStatus() {
       return document.cookie.indexOf("userId") > -1 ? true : false;
     }
@@ -148,5 +151,4 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/scss/login.scss";
-
 </style>

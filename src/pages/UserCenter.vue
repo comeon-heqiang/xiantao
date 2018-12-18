@@ -4,7 +4,7 @@
       <template v-if="isLogin">
         <template v-if="userInfo.userPic">
           <img
-            :src="'http://118.24.219.75/upload/'+userInfo.userPic"
+            :src="userInfo.userPic"
             alt=""
             @click="toEditUser"
           >
