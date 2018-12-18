@@ -1,6 +1,6 @@
 # xiantao
 ## 商城练手项目  
-#### 技术栈Vue+MongoDb+Node+Vuex   
+#### 技术栈Vue+MongoDB+Node+Vuex   
 #### UI框架vant   
 ### 导入MongoDB数据  
 ####  mongorestore -h dbhost -d dbname --dir dbdirectory
