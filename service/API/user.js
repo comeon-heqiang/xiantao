@@ -5,7 +5,8 @@ let Util = require("../util/util");
 const multer = require('koa-multer');
 const path = require("path");
 let CryptoJs = require("../util/crypto")
-let sendEmail = require('../util/sendEmail')
+let sendEmail = require('../util/sendEmail') //发送邮箱验证码
+let sendPhoneCode = require("../util/sendPhoneCode") //发送手机验证码
 // const upload = multer({ dest: './upload/' });
 // 配置图片上传
 let storage = multer.diskStorage({
@@ -30,18 +31,11 @@ router.post("/register", async (ctx) => {
   ctx.request.body.password = CryptoJs.get(ctx.request.body.password)
   let user = new UserModel(ctx.request.body);
 
-  await user.save().then(() => {
-    ctx.body = {
-      code: 200,
-      message: "注册成功"
-    }
-    // ctx.body=info.success('注册成功')
+  await user.save().then(() => {  
+    ctx.body=info.success('注册成功')
   }).catch(error => {
     console.log(error);
-    ctx.body = {
-      code: 500,
-      message: error
-    }
+    ctx.body=info.err(error)   
   })
 })
 
@@ -49,7 +43,7 @@ router.post("/register", async (ctx) => {
 
 // 发送邮箱验证码
 router.post("/sendCode", async (ctx) => {
-  let RandomCode = Math.ceil(Math.random() * 10000 + 1000) //获得4位随机验证码
+  let RandomCode = Math.ceil(Math.random() * 9000 + 1000) //获得4位随机验证码
   let {
     email,
     register
@@ -80,17 +74,46 @@ router.post("/sendCode", async (ctx) => {
 
 
 })
+//发送手机验证码
+router.post("/sendPhoneCode", async (ctx) => {
+  let {
+    phone,
+    register
+  } = ctx.request.body;
+  // 判断是否注册页面
+  if (register) {
+    const userModel = mongoose.model("User");
+    let result = await userModel.findOne({
+      phone: phone
+    });
+  
+    // 提示手机号存在,无法再次注册
+    if (result) {
+      ctx.body = info.success("exist")
+      return;
+    }
+  }
+  
+  // 发送并返回验证码
+  let codeResult = await sendPhoneCode(phone);
+  console.log(codeResult)
+  if (codeResult.resData.result == 0) {
+    ctx.body = info.success(codeResult.code)
+  } else {
+    ctx.body = info.err(codeResult)
+  }
+})
 // 修改密码
 router.post("/editPassword", async (ctx) => {
   let {
-    email,
+    phone,
     password
   } = ctx.request.body;
 
   let userModel = mongoose.model("User");
   try {
     let result = await userModel.updateOne({
-      "email": email
+      phone: phone
     }, {
       $set: {
         "password": password
@@ -104,7 +127,6 @@ router.post("/editPassword", async (ctx) => {
 
 
 })
-
 
 // 用户登录
 router.post("/login", async (ctx) => {

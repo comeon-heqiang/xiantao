@@ -26,12 +26,12 @@
           {{cartCount}}
         </div>
       </van-tabbar-item>
-      <van-tabbar-item
+      <!-- <van-tabbar-item
         icon="location"
         to="/region"
       >
         地区
-      </van-tabbar-item>
+      </van-tabbar-item> -->
       <van-tabbar-item
         icon="contact"
         to="/userCenter"

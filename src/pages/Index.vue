@@ -52,10 +52,10 @@
         v-if="item.isShow"
       >
         <div @click="categoryClick(item)">
-          <img :src="'http://118.24.219.75:3000/images/'+item.image" alt=""> {{item.name}}
+          <img :src="'http://www.foreveral.com:3000/images/'+item.image" alt=""> {{item.name}}
           <!-- <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}} -->
         </div>
-        mongorestore -h 192.168.17.129:27017 -d itcast_restore --dir /home/mongodump/itcast/
+       
       </van-col>
     </van-row>
 
@@ -153,7 +153,7 @@ export default {
     getCategory() {
       axios
         .get(url.category)
-        .then(res => {
+        .then(res => {        
           if (res.data.code == 200 && res.data.message) {
             this.categoryData = res.data.message;
           } else {

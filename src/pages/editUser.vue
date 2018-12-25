@@ -11,7 +11,7 @@
           <img src="../assets/images/userPic.png" v-else>
         </div>
         <!-- VueCoreImageUpload -->
-        <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" url="http://118.24.219.75:3000/dsSystem/user/upload"></vue-core-image-upload>
+        <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" url="http://www.foreveral.com:3000/dsSystem/user/upload"></vue-core-image-upload>
         <!-- <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" url="http://localhost:3000/user/upload"></vue-core-image-upload> -->
         <van-icon name="arrow"></van-icon>
       </li>

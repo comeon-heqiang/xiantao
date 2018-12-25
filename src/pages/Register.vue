@@ -36,8 +36,8 @@
         <van-icon name="location" />
         <input
           type="text"
-          v-model="email"
-          placeholder="请输入邮箱地址"
+          v-model="phone"
+          placeholder="请输入手机号码"
         >
         <van-button
           type="primary"
@@ -45,8 +45,8 @@
           class="btn-code"
           @click="sendCode"
         >{{sendcodeText}}</van-button>
-        <p v-if="emailErrMsg">
-          {{emailErrMsg}}
+        <p v-if="phoneErrMsg">
+          {{phoneErrMsg}}
         </p>
       </div>
       <div class="form-group">
@@ -54,7 +54,7 @@
         <input
           type="text"
           v-model="code"
-          placeholder="请填写邮箱验证码"
+          placeholder="请填写手机验证码"
         >
         <p v-if="codeErrMsg">
           {{codeErrMsg}}
@@ -88,8 +88,8 @@ export default {
       password: "",
       code: "", //验证码
       serverCode: "", //服务端返回的验证码
-      email: "",
-      emailErrMsg: "",
+      phone: "",
+      phoneErrMsg: "",
       userNameErrMsg: "",
       passwordErrMsg: "",
       codeErrMsg: "",
@@ -112,11 +112,11 @@ export default {
         method: "post",
         data: {
           userName: this.userName,
-          password:crypto.set(this.password),
-          email: this.email
+          password: crypto.set(this.password),
+          phone: this.phone
         }
       })
-        .then(response => {          
+        .then(response => {
           if (response.data.code == 200 && response.data.message) {
             Toast.success("注册成功");
             this.$router.push("/login");
@@ -134,8 +134,7 @@ export default {
     },
     // 表单验证
     checkForm() {
-      let isOk = true;
-      console.log(this.code);
+      let isOk = true;     
       if (this.userName.length < 5) {
         this.userNameErrMsg = "用户名不得少于5位";
         isOk = false;
@@ -154,21 +153,28 @@ export default {
       } else {
         this.codeErrMsg = "";
       }
-      if (!this.email) {
-        this.emailErrMsg = "邮箱不能为空";
+      if (!this.phone) {
+        this.phoneErrMsg = "手机号不能为空";
+        isOk = false;
+      } else if (!/^1[3-9]\d{9}$/.test(this.phone)) {
+        this.phoneErrMsg = "请输入正确的手机号";
         isOk = false;
       } else {
-        this.emailErrMsg = "";
+        this.phoneErrMsg = "";
       }
       return isOk;
     },
     // 发送验证码
     sendCode() {
-      if (!this.email) {
-        Toast.fail("请输入邮箱");
+      if (!this.phone) {
+        Toast.fail("请输入手机号");
         return false;
       }
       if (this.sendcodeText != "获取验证码") {
+        return false;
+      }
+      if(!(/^1[3-9]\d{9}$/.test(this.phone))){
+        Toast.fail("手机号错误");
         return false;
       }
       let time = 30;
@@ -184,11 +190,11 @@ export default {
       }, 1000);
 
       axios({
-        url: url.sendCode,
+        url: url.sendPhoneCode,
         method: "POST",
         data: {
-          email: this.email,
-          register: true
+          phone: this.phone,
+          register:true  
         }
       })
         .then(response => {
@@ -199,11 +205,11 @@ export default {
           } else if (res.code == 200 && res.message == "exist") {
             clearInterval(this.timer);
             this.sendcodeText = "获取验证码";
-            Toast.fail("邮箱已经注册,请重新输入邮箱");
+            Toast.fail("手机号已经注册！");
           } else {
             clearInterval(this.timer);
             this.sendcodeText = "获取验证码";
-            Toast.fail("邮件发送失败,请检查邮箱地址是否正确");
+            Toast.fail("验证码发送失败,请检查手机号是否正确");
           }
         })
         .catch(err => {

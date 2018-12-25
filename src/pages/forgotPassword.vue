@@ -9,14 +9,14 @@
         >
         <input
           type="text"
-          placeholder="请输入邮箱"
-          v-model="email"
+          placeholder="请输入手机号"
+          v-model="phone"
         >
         <p @click="sendCode">{{sendcodeText}}</p>
       </div>
       <div
         class="tips"
-        v-if="emailMessage"
+        v-if="phoneMessage"
       >{{emailMessage}}</div>
       <div class="group">
         <img
@@ -87,46 +87,31 @@ export default {
     return {
       sendcodeText: "获取验证码",
       userData: "",
-      email: "",
+      phone: "",
       code: "",
       password: "",
       password2: "",
       serverCode: "", //服务端返回的验证码
       codeMessage: "",
-      emailMessage: "",
+      phoneMessage: "",
       passwordMessage: "",
       password2Message: ""
     };
   },
-  created() {
-    // this.userInfo();
-  },
   methods: {
-    //   获取用户注册邮箱
-    userInfo() {
-      axios({
-        url: url.getUserInfo,
-        method: "GET",
-        withCredentials: true
-      }).then(response => {
-        let res = response.data;
-        if (res.code == 200 && res.message) {
-          this.userData = res;
-        } else {
-          console.log(res);
-          Toast.fail("获取用户信息失败");
-        }
-      });
-    },
     // 获取验证码
     sendCode() {
       let timer = "";
       clearInterval(timer);
-      if (!this.email) {
-        Toast.fail("请输入邮箱");
+      if (!this.phone) {
+        Toast.fail("请输入手机号");
         return false;
       }
       if (this.sendcodeText != "获取验证码") {
+        return false;
+      }
+      if (!/^1[3-9]\d{9}$/.test(this.phone)) {
+        Toast.fail("请输入正确的手机号");
         return false;
       }
       let time = 30;
@@ -141,18 +126,19 @@ export default {
       }, 1000);
 
       axios({
-        url: url.sendCode,
+        url: url.sendPhoneCode,
         method: "POST",
         data: {
-          email: this.email
+          phone: this.phone
         }
       })
         .then(response => {
           let res = response.data;
           if (res.code == 200 && res.message) {
+            console.log('验证码:'+res.message)
             this.serverCode = res.message;
           } else {
-            Toast.fail("获取验证码失败，请检查邮箱是否正确");
+            Toast.fail("获取验证码失败，请检查手机号是否正确");
           }
         })
         .catch(err => {
@@ -192,7 +178,7 @@ export default {
         url: url.editPassword,
         method: "POST",
         data: {
-          email: this.email,
+          phone: this.phone,
           password: this.password
         }
       })

@@ -22,8 +22,9 @@ app.use(static(path.join(__dirname, staticPath)))
 app.use(bodyparser()) //解析客户端请求的body中的内容
 
 app.use(cors({
-  origin: "http://118.24.219.75", //线上地址
-  // origin: "http://localhost:8080", 
+  origin: "http://www.foreveral.com", //线上地址
+  // origin: "http://118.24.219.75", //线上地址
+  // origin: "http://localhost:8080",    
   credentials: true
 })) //解决跨域
 
@@ -53,3 +54,4 @@ app.use(router.allowedMethods()); //使用路由所有方法
 app.listen(3000, () => {
   console.log("服务器启动,端口号3000")
 })
+// echo "/root/usr/local/mongodb-linux/bin/mongod --dbpath=/root/data/mongo/data –logpath=/root/data/mongo/logs –logappend  --auth -–port=27017" >> /etc/rc.local

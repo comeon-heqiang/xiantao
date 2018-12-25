@@ -23,7 +23,7 @@ let UserSchema = new Schema({
     type: String,
     default: ''
   },
-  email: String,
+  phone:String,
   radio: {
     type: String,
     default: ''
