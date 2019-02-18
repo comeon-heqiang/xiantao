@@ -2,6 +2,7 @@ const router = require("koa-router")();
 const fs = require('fs');
 const mongoose = require("mongoose");
 const info = require('../middlewares/info')
+
 // 获取所有商品
 router.get('/', async (ctx) => {
   const goodsModel = mongoose.model("Goods");
@@ -17,8 +18,10 @@ router.get('/', async (ctx) => {
       message: err
     }
   }
-
 })
+
+
+
 // 获取指定分类商品
 router.post('/CategoryGoods', async (ctx) => {
   const goodsModel = mongoose.model("Goods");

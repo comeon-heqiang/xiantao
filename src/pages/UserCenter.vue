@@ -37,14 +37,14 @@
       <ul>
         <li>
           <router-link to="/myOrder">
-            <van-icon name="pending-orders"></van-icon>
+            <van-icon name="balance-list-o"></van-icon>
             我的订单
             <van-icon name="arrow"></van-icon>
           </router-link>
         </li>
         <li>
           <router-link to="/addressList">
-            <van-icon name="location"></van-icon>
+            <van-icon name="location-o"></van-icon>
             地址管理
             <van-icon name="arrow"></van-icon>
           </router-link>
@@ -99,7 +99,9 @@ export default {
     this.getUserInfo();
     this.isLogin = this.getLoginStatus();
   },
-  mounted() {},
+  mounted() {
+    
+  },
   methods: {
     // 获取用户信息
     getUserInfo() {

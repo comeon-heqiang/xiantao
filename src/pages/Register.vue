@@ -11,7 +11,7 @@
         >
       </div>
       <div class="form-group">
-        <van-icon name="contact" />
+        <van-icon name="user-o" />
         <input
           type="text"
           v-model="userName"
@@ -22,7 +22,7 @@
         </p>
       </div>
       <div class="form-group">
-        <van-icon name="password-not-view" />
+        <van-icon name="closed-eye" />
         <input
           type="password"
           v-model="password"
@@ -33,7 +33,7 @@
         </p>
       </div>
       <div class="form-group">
-        <van-icon name="location" />
+        <van-icon name="phone-o" />
         <input
           type="text"
           v-model="phone"
@@ -50,7 +50,7 @@
         </p>
       </div>
       <div class="form-group">
-        <van-icon name="pending-orders" />
+        <van-icon name="chat-o" />
         <input
           type="text"
           v-model="code"
@@ -120,8 +120,7 @@ export default {
           if (response.data.code == 200 && response.data.message) {
             Toast.success("注册成功");
             this.$router.push("/login");
-          } else {
-            console.log(response.data.message);
+          } else {           
             Toast.fail("注册失败,用户名重复");
             this.openLoading = false;
           }

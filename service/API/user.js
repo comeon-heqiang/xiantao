@@ -13,7 +13,7 @@ let storage = multer.diskStorage({
   // 文件保存路径
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../assets/upload/'))
-    // cb(null, 'http://localhost:3000/upload/')
+    // cb(null, 'http://www.foreveral.com/upload/')
   },
   //修改文件名称
   filename: (req, file, cb) => {
@@ -630,7 +630,8 @@ router.post('/delOrder', async (ctx) => {
 //上传头像 要注意filename要和前端的表单元素的name一致
 router.post('/upload', upload.single('file'), async (ctx) => {
 
-  ctx.body = info.success('http://118.24.219.75/upload/' + ctx.req.file.filename);
+  // ctx.body = info.success('http://118.24.219.75/upload/' + ctx.req.file.filename);
+  ctx.body = info.success('http://www.foreveral.com:3000/upload/' + ctx.req.file.filename);
   //originalname 源文件名称，path上传后文件的临时路径，mimetype文件类型
   // { fieldname: 'file',
   // originalname: 'bg-brand2.jpg',

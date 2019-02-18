@@ -3,19 +3,19 @@
 
     <van-tabbar v-model="active">
       <van-tabbar-item
-        icon="home"
+        icon="home-o"
         to="/"
       >
         首页
       </van-tabbar-item>
       <van-tabbar-item
-        icon="shop"
+        icon="bag-o"
         to="/shop"
       >
         商品
       </van-tabbar-item>
       <van-tabbar-item
-        icon="cart"
+        icon="shopping-cart-o"
         to="/cart"
       >
         购物车
@@ -33,7 +33,7 @@
         地区
       </van-tabbar-item> -->
       <van-tabbar-item
-        icon="contact"
+        icon="manager-o"
         to="/userCenter"
       >
         个人中心

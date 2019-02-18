@@ -22,6 +22,8 @@
         left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png"
       />
     </div>
+
+    <!-- banner 轮播图 -->
     <van-swipe
       :autoplay="3000"
       class="banner"
@@ -39,6 +41,7 @@
         <p>{{item.intro}}</p>
       </van-swipe-item>
     </van-swipe>
+
     <!-- 类别栏目 -->
     <van-row
       type="flex"
@@ -49,20 +52,22 @@
         span="6"
         v-for="(item,index) in categoryData"
         :key="index"
-        v-if="item.isShow"
       >
         <div @click="categoryClick(item)">
-          <img :src="'http://www.foreveral.com:3000/images/'+item.image" alt=""> {{item.name}}
+          <img
+            :src="'http://www.foreveral.com:3000/images/'+item.image"
+            alt=""
+          > {{item.name}}
           <!-- <img :src="'http://localhost:3000/images/'+item.image" alt=""> {{item.name}} -->
         </div>
-       
+
       </van-col>
     </van-row>
 
+    <!-- 商品专区 -->
     <div class="title">商品专区
       <router-link to="/shop">查看更多</router-link>
     </div>
-    <!-- 所有商品 -->
     <van-list
       v-model="loading"
       :finished="finished"
@@ -95,11 +100,10 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config";
+import { Toast } from 'vant'
 import headerSearch from "@/components/search-bar";
 export default {
-  data() {
+  data () {
     return {
       bannerList: [
         {
@@ -112,34 +116,37 @@ export default {
             "【仙桃抖音达人征集令】超多奖品等你拿！戏精们“放肆”抖抖抖抖起来~"
         }
       ],
-      categoryData: [],
-      searchVal: "",
+      categoryData: [], //栏目数据
+      searchVal: "",  //搜索值
       loading: false,
       finished: false,
       page: 1,
-      goodsData: []
+      goodsData: [] //商品数据
     };
   },
-  created() {
+  created () {
+
+  },
+  mounted () {
     this.getGoods();
     this.getCategory();
   },
-  mounted() {},
   methods: {
     // 获取商品
-    getGoods() {
-      axios({
-        url: url.getPageGoods,
+    getGoods () {
+      this.$axios({
+        url: this.$serverUrl.getPageGoods,
         method: "POST",
         data: {
           page: this.page
         }
       })
-        .then(res => {
-          if (res.data.code == 200 && res.data.message.length) {
+        .then(response => {
+          let res = response.data;
+          if (res.code == 200 && res.message.length) {
             this.finished = false;
             this.page++;
-            this.goodsData = this.goodsData.concat(res.data.message);
+            this.goodsData = this.goodsData.concat(res.message);
           } else {
             this.finished = true;
           }
@@ -150,12 +157,12 @@ export default {
         });
     },
     // 获取栏目
-    getCategory() {
-      axios
-        .get(url.category)
-        .then(res => {        
+    getCategory () {
+      this.$axios
+        .get(this.$serverUrl.category)
+        .then(res => {
           if (res.data.code == 200 && res.data.message) {
-            this.categoryData = res.data.message;
+            this.categoryData = res.data.message.filter(item => item.isShow);
           } else {
             Toast.fail("获取类别失败");
           }
@@ -166,22 +173,22 @@ export default {
         });
     },
     // 上拉加载更多
-    onLoad() {
+    onLoad () {
       setTimeout(() => {
         this.getGoods();
       }, 500);
     },
     // 跳转商品详情
-    goGoodsDetail(item) {
+    goGoodsDetail (item) {
       this.$router.push({ path: "/goods", query: { goodsId: item.ID } });
     },
     // 跳转搜索页
-    toSearch() {
+    toSearch () {
       this.$router.push({ path: "/search" });
     },
     // 栏目点击跳转
-    categoryClick(item) {
-      this.$router.push({ name: "Shop", params: { categoryID: item.id } });
+    categoryClick (item) {
+      this.$router.push({ path: "/shop", query: { categoryID: item.id } });
     }
   },
   components: {

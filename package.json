@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "vant": "^1.2.0",
+    "crypto-js": "^3.1.9-1",
+    "vant": "^1.6.4",
     "vue": "^2.5.2",
     "vue-core-image-upload": "^2.4.11",
     "vue-router": "^3.0.1",
@@ -47,13 +48,14 @@
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
-    "url-loader": "^0.5.8",
+    "url-loader": "^1.1.2",
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dev-server": "^2.9.1",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.0.0",
     "webpack-merge": "^4.1.0"
   },
   "engines": {

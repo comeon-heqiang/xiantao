@@ -11,7 +11,7 @@
         >
       </div>
       <div class="form-group">
-        <van-icon name="contact" />
+        <van-icon name="user-o" />
         <input
           type="text"
           v-model="userName"
@@ -22,7 +22,7 @@
         </p>
       </div>
       <div class="form-group">
-        <van-icon name="password-not-view" />
+        <van-icon name="closed-eye" />
         <input
           type="password"
           v-model="password"
@@ -56,17 +56,19 @@ import { Toast } from "vant";
 import loginStatus from "../util/isLogin.js";
 import crypto from "@/util/crypto";
 export default {
-  data() {
+  data () {
     return {
       userName: "",
       password: "",
-      userNameErrMsg: "",
-      passwordErrMsg: "",
+      errMsg: {
+        userName: "",
+        passWord: "",
+      },
       openLoading: false,
       isLogin: false
     };
   },
-  created() {
+  created () {
     // this.isLogin = loginStatus;
     // if (localStorage.userInfo) {
     //   Toast("已登录");
@@ -78,14 +80,14 @@ export default {
       this.$router.push("/");
     }
   },
-  mounted() {},
+  mounted () { },
   methods: {
-    loginAction() {
+    loginAction () {
       this.checkForm() && this.Login();
     },
     // 服务端验证用户名密码
-    Login() {
-      this.openLoading = true;   
+    Login () {
+      this.openLoading = true;
       axios({
         url: url.login,
         method: "post",
@@ -104,7 +106,7 @@ export default {
               resolve();
             })
               .then(res => {
-                Toast.success("登录成功");                
+                Toast.success("登录成功");
                 setTimeout(() => {
                   this.$router.push("/");
                 }, 500);
@@ -125,24 +127,24 @@ export default {
         });
     },
     // 表单验证
-    checkForm() {
+    checkForm () {
       let isOk = true;
       if (this.userName.length < 5) {
-        this.userNameErrMsg = "用户名不得少于5位";
+        this.errMsg.userName = "用户名不得少于5位";
         isOk = false;
       } else {
-        this.userNameErrMsg = "";
+        this.errMsg.userName = "";
       }
       if (this.password.length < 5) {
-        this.passwordErrMsg = "密码不得少于5位";
+        this.errMsg.passWord = "密码不得少于5位";
         isOk = false;
       } else {
-        this.passwordErrMsg = "";
+        this.errMsg.passWord = "";
       }
       return isOk;
     },
     // 获取cookie
-    getLoginStatus() {
+    getLoginStatus () {
       return document.cookie.indexOf("userId") > -1 ? true : false;
     }
   }

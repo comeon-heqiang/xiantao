@@ -4,14 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import Vant from 'Vant'
-import 'vant/lib/vant-css/index.css';
-
+import Vant from 'vant'
+import 'vant/lib/index.css';
+import axios from 'axios';
+import url from '@/serviceAPI.config.js' //请求接口
 Vue.use(Vant)
 
 Vue.config.productionTip = false;
-
-
+Vue.prototype.$axios = axios
+Vue.prototype.$serverUrl = url
 import store from './store/store'
 /* eslint-disable no-new */
 new Vue({

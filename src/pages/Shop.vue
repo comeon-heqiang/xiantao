@@ -1,24 +1,24 @@
 <template>
   <div>
-    <van-nav-bar title="商城">
-
-    </van-nav-bar>
+    <van-nav-bar title="商城"></van-nav-bar>
+    <!-- 所有商品 -->
     <van-row>
+      <!-- 左侧商品类别 -->
       <van-col span="6">
         <div class="leftNav" id="leftNav">
           <ul>
             <!-- <li>所有商品</li> -->
-            <li v-for="(item,index) in categoryData" :key="index" :class="{on:index==active}" @click="categoryClick(item,index)">
+            <li v-for="(item,index) in categoryData" :key="index" :class="{'on':index==active}" @click="categoryClick(item,index)">
               {{item.name}}
             </li>
           </ul>
         </div>
       </van-col>
+      <!-- 右侧商品数据 -->
       <van-col span="18">
         <div class="goods-list" id="goods">
           <ul>
             <li v-for="(item,index) in GoodsData" :key="index" @click="toGoodsDetail(item)">
-
               <img :src="item.IMAGE1" alt="">
               <div class="name">
                 {{item.NAME}}
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config.js";
 import { Toast } from "vant";
 export default {
   data() {
@@ -48,8 +46,8 @@ export default {
     };
   },
   created() {    
-    if (this.$route.params.categoryID) {
-      this.categoryID = this.$route.params.categoryID;
+    if (this.$route.query.categoryID) {
+      this.categoryID = this.$route.query.categoryID;      
       switch (this.categoryID) {
         case "2":
           this.active = 0;
@@ -85,8 +83,8 @@ export default {
   methods: {
     //   获取分类数据
     getCategory() {
-      axios
-        .get(url.category)
+      this.$axios
+        .get(this.$serverUrl.category)
         .then(res => {
           if (res.data.code == 200 && res.data.message) {
             this.categoryData = res.data.message;
@@ -105,7 +103,7 @@ export default {
     },
     // 获取所有商品
     getAllGoods() {
-      axios(url.goods)
+      this.$axios(this.$serverUrl.goods)
         .then(response => {
           if (response.data.code == 200 && response.data.message) {
             this.allGoods = response.data.message;
@@ -124,8 +122,8 @@ export default {
     },
     // 根据分类获取商品数据
     getGoods() {
-      axios({
-        url: url.categoryGoods,
+      this.$axios({
+        url: this.$serverUrl.categoryGoods,
         method: "post",
         data: {
           CategoryID: this.categoryID

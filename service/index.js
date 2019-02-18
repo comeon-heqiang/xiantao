@@ -22,9 +22,9 @@ app.use(static(path.join(__dirname, staticPath)))
 app.use(bodyparser()) //解析客户端请求的body中的内容
 
 app.use(cors({
-  origin: "http://www.foreveral.com", //线上地址
+  // origin: "http://www.foreveral.com", //线上地址
   // origin: "http://118.24.219.75", //线上地址
-  // origin: "http://localhost:8080",    
+  origin: "http://localhost:8080",    
   credentials: true
 })) //解决跨域
 
