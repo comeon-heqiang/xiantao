@@ -45,9 +45,13 @@
         <van-icon name="arrow"></van-icon>
       </li>
     </ul>
+
+    <!-- 日期选择 -->
     <van-popup v-model="dateShow" position="bottom">
       <van-datetime-picker v-model="currentDate" :min-date="minDate" type="date" @change="change" :max-date="maxDate" @cancel="cancel" @confirm="confirm" />
     </van-popup>
+
+    <!-- 地址选择 -->
     <van-popup v-model="areaShow" position="bottom">
       <van-area :area-list="areaList" @cancel="areaShow=false" @confirm="areaConfirm" />
     </van-popup>
@@ -56,8 +60,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config";
 import NavBar from "@/components/NavBar";
 import util from "@/util/util";
 import area from "@/data/area";
@@ -75,9 +77,7 @@ export default {
        minDate: new Date(1950,1,1),
     };
   },
-  mounted() {
-    // this.userId = this.$route.params.userId;
-    // console.log(this.userId)
+  mounted() { 
   },
   created() {
     this.getUserInfo();
@@ -89,8 +89,8 @@ export default {
   methods: {
     // 获取用户基本信息
     getUserInfo() {
-      axios({
-        url: url.getUserInfo,
+      this.$axios({
+        url: this.$serverUrl.getUserInfo,
         method: "GET",
         withCredentials: true
       })
@@ -142,15 +142,15 @@ export default {
     },
     // 图片上传后的回调
     uploadImage(res) {
-      console.log(res);
+      console.log(res,'图片上传');
       if (res.code == 200 && res.message) {
         this.userInfo.userPic = res.message;
       }
     },
     // 提交
-    submit() {
-      axios({
-        url: url.editUserInfo,
+    submit() {      
+      this.$axios({
+        url: this.$serverUrl.editUserInfo,
         method: "POST",
         data: {
           userInfo: this.userInfo
@@ -185,16 +185,7 @@ export default {
     border-bottom: 1px solid #ece9ec;
     padding: 12px 15px;
     font-size: 14px;
-    position: relative;
-    // .upload-component {
-    //   position: absolute;
-    //   z-index: 100;
-    //   opacity: 0;
-    //   top: 10px;
-    //   right: 30px;
-    //   width: 70px;
-    //   height: 70px;
-    // }
+    position: relative;   
     .van-uploader {
       position: absolute;
       width: 70px;
@@ -213,12 +204,7 @@ export default {
       border: 0;
       text-align: right;
       padding: 0 10px;
-    }
-    // & > div {
-    //   flex: 1;
-    //   display: flex;
-    //   justify-content: flex-end;
-    // }
+    }  
     .van-radio {
       margin-left: 10px;
     }

@@ -86,8 +86,6 @@
 
 <script>
 import loginStatus from "../util/isLogin.js";
-import axios from "axios";
-import url from "@/serviceAPI.config";
 export default {
   data() {
     return {
@@ -105,8 +103,8 @@ export default {
   methods: {
     // 获取用户信息
     getUserInfo() {
-      axios({
-        url: url.getUserInfo,
+      this.$axios({
+        url: this.$serverUrl.getUserInfo,
         method: "GET",
         withCredentials: true
       })
@@ -127,8 +125,8 @@ export default {
     },
     // 退出登录
     logoOut() {
-      axios({
-        url: url.logout,
+      this.$axios({
+        url: this.$serverUrl.logout,
         method: "GET",
         withCredentials: true
       })

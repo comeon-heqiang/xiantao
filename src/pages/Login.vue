@@ -17,8 +17,8 @@
           v-model="userName"
           placeholder="请输入您的账号"
         >
-        <p v-if="userNameErrMsg">
-          {{userNameErrMsg}}
+        <p v-if="errMsg.userName">
+          {{errMsg.userName}}
         </p>
       </div>
       <div class="form-group">
@@ -28,8 +28,8 @@
           v-model="password"
           placeholder="请输入您的密码"
         >
-        <p v-if="passwordErrMsg">
-          {{passwordErrMsg}}
+        <p v-if="errMsg.passWord">
+          {{errMsg.passWord}}
         </p>
       </div>
       <van-button

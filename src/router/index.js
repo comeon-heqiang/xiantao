@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Index from '@/pages/Index'
 import Main from '@/pages/Main'
-
 import Cart from '@/pages/Cart'
 import Shop from '@/pages/Shop'
 import Region from '@/pages/Region'
@@ -23,6 +23,7 @@ import Search from '@/pages/Search'
 import SearchResult from '@/pages/SearchResult'
 import Error404 from '@/pages/404'
 import forgotPassword from '@/pages/forgotPassword'
+
 Vue.use(Router);
 import {
   Toast,
@@ -53,6 +54,7 @@ const router = new Router({
       path: "/",
       name: "Main",
       component: Main,
+      redirect:'/Main/',
       children: [{
         path: '/',
         name: "Index",

@@ -81,7 +81,7 @@
 
 <script>
 import loginStatus from "../util/isLogin.js";
-import axios from "axios";
+
 import url from "@/serviceAPI.config";
 import NavBar from "@/components/NavBar";
 import areaData from "@/data/area.js";
@@ -107,8 +107,8 @@ export default {
   methods: {
     // 获取收货地址
     getAddress() {
-      axios({
-        url: url.getAddress,
+      this.$axios({
+        url:this.$serverUrl.getAddress,
         method: "GET",
         withCredentials: true
       })
@@ -130,8 +130,8 @@ export default {
     // 设置默认地址
     setDefault(item) {
       let addressId = item.addressId;
-      axios({
-        url: url.setDefault,
+      this.$axios({
+        url:this.$serverUrl.setDefault,
         method: "POST",
         data: {
           addressId: addressId
@@ -151,8 +151,8 @@ export default {
     },
     // 删除地址
     delAddress(item) {
-      axios({
-        url: url.delAddress,
+      this.$axios({
+        url:this.$serverUrl.delAddress,
         method: "POST",
         data: {
           addressId: item.addressId
@@ -212,8 +212,8 @@ export default {
         areaCode: item.areaCode,
         isDefault: item.isDefault
       };
-      axios({
-        url: url.editAddress,
+      this.$axios({
+        url:this.$serverUrl.editAddress,
         method: "POST",
         data: {
           addressInfo: addressInfo,

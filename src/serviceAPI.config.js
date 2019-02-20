@@ -1,6 +1,6 @@
-// const LOCALURL = 'http://118.24.219.75:3000/';
-// const LOCALURL = '/apis/';
-const LOCALURL = 'http://localhost:3000/';
+const LOCALURL = process.env.API_ROOT; //生产环境与线上环境地址
+// console.log(process.env.API_ROOT)
+
 let URL = {
   register: LOCALURL + 'user/register', //用户注册
   login: LOCALURL + 'user/login', //用户登录

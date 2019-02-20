@@ -8,6 +8,9 @@ import Vant from 'vant'
 import 'vant/lib/index.css';
 import axios from 'axios';
 import url from '@/serviceAPI.config.js' //请求接口
+
+import { Lazyload } from 'vant'; //使用图片懒加载
+Vue.use(Lazyload);
 Vue.use(Vant)
 
 Vue.config.productionTip = false;

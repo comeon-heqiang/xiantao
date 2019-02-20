@@ -25,21 +25,20 @@ let storage = multer.diskStorage({
 var upload = multer({
   storage: storage
 });
+
 // 用户注册
 router.post("/register", async (ctx) => {
   const UserModel = mongoose.model('User');
   ctx.request.body.password = CryptoJs.get(ctx.request.body.password)
   let user = new UserModel(ctx.request.body);
 
-  await user.save().then(() => {  
-    ctx.body=info.success('注册成功')
+  await user.save().then(() => {
+    ctx.body = info.success('注册成功')
   }).catch(error => {
     console.log(error);
-    ctx.body=info.err(error)   
+    ctx.body = info.err(error)
   })
 })
-
-
 
 // 发送邮箱验证码
 router.post("/sendCode", async (ctx) => {
@@ -74,6 +73,7 @@ router.post("/sendCode", async (ctx) => {
 
 
 })
+
 //发送手机验证码
 router.post("/sendPhoneCode", async (ctx) => {
   let {
@@ -86,14 +86,14 @@ router.post("/sendPhoneCode", async (ctx) => {
     let result = await userModel.findOne({
       phone: phone
     });
-  
+
     // 提示手机号存在,无法再次注册
     if (result) {
       ctx.body = info.success("exist")
       return;
     }
   }
-  
+
   // 发送并返回验证码
   let codeResult = await sendPhoneCode(phone);
   console.log(codeResult)
@@ -103,6 +103,7 @@ router.post("/sendPhoneCode", async (ctx) => {
     ctx.body = info.err(codeResult)
   }
 })
+
 // 修改密码
 router.post("/editPassword", async (ctx) => {
   let {
@@ -234,6 +235,7 @@ router.post("/login", async (ctx) => {
     ctx.body = info.err(error)
   }
 })
+
 // 退出登录
 router.get("/logout", async (ctx) => {
   ctx.cookies.set('userId', '', {
@@ -243,6 +245,7 @@ router.get("/logout", async (ctx) => {
   })
   ctx.body = info.success("success")
 })
+
 //获取用户信息
 router.get("/getUserInfo", async (ctx) => {
   let userId = ctx.cookies.get("userId");
@@ -265,6 +268,7 @@ router.get("/getUserInfo", async (ctx) => {
 
 
 })
+
 //获取用户购物车商品
 router.get('/getCartList', async (ctx) => {
   const UserModel = mongoose.model('User');
@@ -280,6 +284,7 @@ router.get('/getCartList', async (ctx) => {
     ctx.body = info.err(error);
   }
 })
+
 //购物车 单个商品选中与取消选中
 router.post('/goodsCheck', async (ctx) => {
   let {
@@ -300,6 +305,7 @@ router.post('/goodsCheck', async (ctx) => {
     ctx.body = info.err(error);
   }
 })
+
 // 购物车全选与取消全选
 router.post('/checkAll', async (ctx) => {
   let checkAllFlag = ctx.request.body.checkAllFlag ? 1 : 0;
@@ -324,31 +330,34 @@ router.post('/checkAll', async (ctx) => {
     ctx.body = info.err(error)
   }
 });
+
 // 获取购物车商品数量
 router.get("/getCartCount", async (ctx) => {
   const userModel = mongoose.model("User");
   let userId = ctx.cookies.get("userId");
-  if (userId) {
-    try {
-      let result = await userModel.findOne({
-        _id: userId
-      });
-      let count = 0;
-      if (result) {
-        result.cartList.forEach(item => {
-          count += item.productNum;
-        })
-      }
-      ctx.body = info.success(count);
-    } catch (error) {
-      console.log(error);
-      ctx.body = info.err(error)
-    }
-  } else {
+  if (!userId) {
     console.log("未登录");
     ctx.body = info.success(0)
+    return;
   }
+  try {
+    let result = await userModel.findOne({
+      _id: userId
+    });
+    let count = 0;
+    if (result) {
+      result.cartList.forEach(item => {
+        count += item.productNum;
+      })
+    }
+    ctx.body = info.success(count);
+  } catch (error) {
+    console.log(error);
+    ctx.body = info.err(error)
+  }
+
 })
+
 // 删除购物车单个商品
 router.post("/delGoods", async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -372,6 +381,7 @@ router.post("/delGoods", async (ctx) => {
   }
 
 });
+
 // 更新商品数量
 router.post('/changeGoodsNum', async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -393,6 +403,7 @@ router.post('/changeGoodsNum', async (ctx) => {
     ctx.body = info.err(error);
   }
 })
+
 //获取收货地址列表
 router.get('/getAddress', async (ctx) => {
   let userId = ctx.cookies.get("userId");
@@ -406,6 +417,7 @@ router.get('/getAddress', async (ctx) => {
     ctx.body = info.err(err)
   }
 })
+
 //设置默认地址
 router.post('/setDefault', async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -432,6 +444,7 @@ router.post('/setDefault', async (ctx) => {
     ctx.body = info.err(error)
   }
 })
+
 //删除地址
 router.post('/delAddress', async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -453,6 +466,7 @@ router.post('/delAddress', async (ctx) => {
     ctx.body = info.err(error)
   }
 })
+
 //编辑地址和添加地址
 router.post("/editAddress", async (ctx) => {
   let addressInfo = ctx.request.body.addressInfo; //获取地址信息
@@ -516,6 +530,7 @@ router.post("/editAddress", async (ctx) => {
   }
 
 })
+
 //生成订单
 router.post('/pay', async (ctx) => {
   let userId = ctx.cookies.get("userId");
@@ -569,6 +584,7 @@ router.post('/pay', async (ctx) => {
   }
 
 })
+
 // 获取所有订单
 router.get("/getAllOrder", async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -584,6 +600,7 @@ router.get("/getAllOrder", async (ctx) => {
     ctx.body = info.err(error)
   }
 })
+
 // 支付后的订单信息
 router.post("/getOrderInfo", async (ctx) => {
   let userId = ctx.cookies.get('userId');
@@ -607,6 +624,7 @@ router.post("/getOrderInfo", async (ctx) => {
   }
 
 })
+
 // 删除订单
 router.post('/delOrder', async (ctx) => {
   let userId = ctx.cookies.get("userId");
@@ -627,11 +645,13 @@ router.post('/delOrder', async (ctx) => {
     ctx.body = info.err(error)
   }
 })
+
 //上传头像 要注意filename要和前端的表单元素的name一致
 router.post('/upload', upload.single('file'), async (ctx) => {
-
+  console.log(ctx.req.file)
   // ctx.body = info.success('http://118.24.219.75/upload/' + ctx.req.file.filename);
-  ctx.body = info.success('http://www.foreveral.com:3000/upload/' + ctx.req.file.filename);
+  ctx.body = info.success('http://localhost:3000/upload/' + ctx.req.file.filename);
+  // ctx.body = info.success('http://www.foreveral.com:3000/upload/' + ctx.req.file.filename);
   //originalname 源文件名称，path上传后文件的临时路径，mimetype文件类型
   // { fieldname: 'file',
   // originalname: 'bg-brand2.jpg',
@@ -642,6 +662,8 @@ router.post('/upload', upload.single('file'), async (ctx) => {
   // path: 'upload\\fd71016c94b025cb899f3b0f5b6f1988',
   // size: 108989 }
 })
+
+
 // 编辑用户资料
 router.post('/editUserInfo', async (ctx) => {
   let userInfo = ctx.request.body.userInfo;

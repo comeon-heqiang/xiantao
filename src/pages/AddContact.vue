@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config";
+
 import NavBar from "@/components/NavBar";
 export default {
   data() {
@@ -45,8 +44,8 @@ export default {
   methods: {
     //   获取联系信息
     getContact() {
-      axios({
-        url: url.getContact,
+      this.$axios({
+        url: this.$serverUrl.getContact,
         method: "GET"
       })
         .then(res => {
@@ -60,8 +59,8 @@ export default {
         });
     },
     submit() {
-      axios({
-        url: url.editContact,
+      this.$axios({
+        url: this.$serverUrl.editContact,
         method: "POST",
         data: {
           contact: this.contactData

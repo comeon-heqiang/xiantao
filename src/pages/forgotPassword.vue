@@ -31,8 +31,8 @@
       </div>
       <div
         class="tips"
-        v-if="codeMessage"
-      >{{codeMessage}}</div>
+        v-if="errMsg.code"
+      >{{errMsg.code}}</div>
       <div class="group">
         <img
           src="../assets/images/icon-password.png"
@@ -46,8 +46,8 @@
       </div>
       <div
         class="tips"
-        v-if="passwordMessage"
-      >{{passwordMessage}}</div>
+        v-if="errMsg.passWord"
+      >{{errMsg.passWord}}</div>
       <div class="group">
         <img
           src="../assets/images/icon-password.png"
@@ -61,8 +61,8 @@
       </div>
       <div
         class="tips"
-        v-if="password2Message"
-      >{{password2Message}}</div>
+        v-if="errMsg.passWord2"
+      >{{errMsg.passWord2}}</div>
       <van-row
         type="flex"
         justify="center"
@@ -77,9 +77,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "../serviceAPI.config.js";
-
 import { Toast, Dialog } from "vant";
 import navBar from "../components/NavBar";
 export default {
@@ -92,16 +89,19 @@ export default {
       password: "",
       password2: "",
       serverCode: "", //服务端返回的验证码
-      codeMessage: "",
-      phoneMessage: "",
-      passwordMessage: "",
-      password2Message: ""
+      errMsg:{
+        code:'',
+        phone:'',
+        password:'',
+        password2:''
+      }
     };
   },
   methods: {
     // 获取验证码
     sendCode() {
       let timer = "";
+      let time = 30;
       clearInterval(timer);
       if (!this.phone) {
         Toast.fail("请输入手机号");
@@ -114,7 +114,7 @@ export default {
         Toast.fail("请输入正确的手机号");
         return false;
       }
-      let time = 30;
+     
       timer = setInterval(() => {
         if (time > 0) {
           this.sendcodeText = "再次获取(" + time + "s)";
@@ -125,8 +125,8 @@ export default {
         }
       }, 1000);
 
-      axios({
-        url: url.sendPhoneCode,
+      this.$axios({
+        url: this.$serverUrl.sendPhoneCode,
         method: "POST",
         data: {
           phone: this.phone
@@ -150,32 +150,31 @@ export default {
     checkForm() {
       let isOk = true;
       if (!this.password) {
-        this.passwordMessage = "密码不能为空";
+        this.errMsg.password = "密码不能为空";
         isOk = false;
       } else {
-        this.passwordMessage = "";
+        this.errMsg.password = "";
       }
       if (this.password != this.password2) {
-        this.password2Message = "两次输入密码不一致";
+        this.errMsg.password2 = "两次输入密码不一致";
         isOk = false;
       } else {
-        this.password2Message = "";
+        this.errMsg.password2 = "";
       }
       if (this.serverCode != this.code) {
-        this.codeMessage = "验证码输入错误";
+        this.errMsg.code = "验证码输入错误";
         isOk = false;
       } else {
-        this.codeMessage = "";
+        this.errMsg.code = "";
       }
-
       return isOk;
     },
     verify() {
       this.checkForm() && this.submit();
     },
     submit() {
-      axios({
-        url: url.editPassword,
+      this.$axios({
+        url: this.$serverUrl.editPassword,
         method: "POST",
         data: {
           phone: this.phone,

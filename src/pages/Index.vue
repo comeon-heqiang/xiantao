@@ -16,7 +16,7 @@
     <!-- 新闻资讯 -->
     <div class="news">
       <van-notice-bar
-        text="江南皮革厂倒闭了，老板带着小姨了跑了，全场29元！29元你买不了吃亏，买不了上当！先到先选，量大从优！"
+        text="江南皮革厂倒闭了，老板带着小姨子跑了，全场29元！29元你买不了吃亏，买不了上当！先到先选，量大从优！"
         mode="closeable"
         :speed="30"
         left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png"

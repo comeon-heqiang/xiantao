@@ -1,14 +1,37 @@
 <template>
   <div>
     <van-nav-bar title="购物车"></van-nav-bar>
-    <div v-if="GoodsList.length>0" class="cart-list">
+    <!-- 购物车商品列表 -->
+    <div
+      v-if="GoodsList.length>0"
+      class="cart-list"
+    >
       <ul>
-        <li v-for="(item,index) in GoodsList" :key="index">
-          <van-icon name="passed" class="icon-checked" @click="goodsCheck(item)" v-if="item.checked"></van-icon>
-          <van-icon name="check" class="icon-checked icon-no-checked" @click="goodsCheck(item)" v-else></van-icon>
+        <li
+          v-for="(item,index) in GoodsList"
+          :key="index"
+        >
+          <!-- 商品选中状态 -->
+          <van-icon
+            v-if="item.checked"
+            name="passed"
+            class="icon-checked"
+            @click="goodsCheck(item)"
+          ></van-icon>
+          <van-icon
+            v-else
+            name="circle"
+            class="icon-checked icon-no-checked"
+            @click="goodsCheck(item)"
+          ></van-icon>
           <div class="pic">
-            <img :src="item.IMAGE1" alt="">
+            <img
+              :src="item.IMAGE1"
+              alt=""
+            >
           </div>
+
+          <!-- 商品信息 -->
           <div class="info">
             <div class="name">
               {{item.NAME}}
@@ -17,39 +40,71 @@
               ￥{{item.PRESENT_PRICE}}
               <div class="stepper">
                 <span @click="changeNum('minus',item)"></span>
-                <input type="text" @blur="changeNum('focus',item)" v-model="item.productNum">
+                <input
+                  type="text"
+                  @blur="changeNum('focus',item)"
+                  v-model="item.productNum"
+                >
                 <span @click="changeNum('add',item)"></span>
               </div>
-              <!-- <van-stepper max="200" :change="goodsPlus(item)" v-model="item.productNum" /> -->
-
             </div>
           </div>
-          <div class="del" @click="delGoods(item.ID)">
+          <div
+            class="del"
+            @click="delGoods(item.ID)"
+          >
             <van-icon name="delete"></van-icon>
           </div>
         </li>
 
       </ul>
     </div>
-    <div v-else class="no-data">
-      <img src="../assets/images/no-goods.png" alt="">
+    <!-- 购物车无商品 -->
+    <div
+      v-else
+      class="no-data"
+    >
+      <img
+        src="../assets/images/no-goods.png"
+        alt=""
+      >
       <p>
         购物车里没有商品是件忧伤的事情<br>赶紧去逛逛~
       </p>
-      <van-button type="danger" size="large" @click="goShop">去逛逛</van-button>
+      <van-button
+        type="danger"
+        size="large"
+        @click="goShop"
+      >去逛逛</van-button>
     </div>
+
+    <!-- 商品全选及总价计算 -->
     <template v-if="GoodsList.length>0">
       <div class="fixed-btm">
         <div class="checkAll">
-          <van-icon name="passed" class="icon-checkAll icon-checked" @click="checkAll" v-if="checkAllFlag"></van-icon>
-          <van-icon name="check" class="icon-checkAll icon-no-checked" @click="checkAll" v-else></van-icon>
+          <van-icon
+            name="passed"
+            class="icon-checkAll icon-checked"
+            @click="checkAll"
+            v-if="checkAllFlag"
+          ></van-icon>
+          <van-icon
+            name="circle"
+            class="icon-checkAll icon-no-checked"
+            @click="checkAll"
+            v-else
+          ></van-icon>
           全选
         </div>
         <div class="buy-info ">
           总计:
           <strong>￥{{TotalMoney}}</strong>
         </div>
-        <div class="btn-buy" @click="toOrder" :class="this.checkCount.CheckNum<1?'noCheck':''">
+        <div
+          class="btn-buy"
+          @click="toOrder"
+          :class="this.checkCount.CheckNum<1?'noCheck':''"
+        >
           去结算
         </div>
       </div>
@@ -58,38 +113,33 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config";
 import { Toast } from "vant";
 import loginStatus from "../util/isLogin.js";
 export default {
-  data() {
+  data () {
     return {
       GoodsList: []
     };
   },
-  created() {
+  created () {
     // this.getCartList();
   },
-  mounted() {
+  mounted () {
     if (this.getLoginStatus()) {
       this.getCartList();
     }
   },
   computed: {
     //   总金额计算
-    TotalMoney() {
+    TotalMoney () {
       return this.checkCount.totalPrice;
     },
     // 全选
-    checkAllFlag() {
-      return (
-        this.checkCount.CheckNum == this.GoodsList.length &&
-        this.GoodsList.length > 0
-      );
+    checkAllFlag () {
+      return (this.GoodsList.length > 0 && this.checkCount.CheckNum == this.GoodsList.length);
     },
     // 商品总金额计算
-    checkCount() {
+    checkCount () {
       let total = { CheckNum: 0, totalPrice: 0 };
       this.GoodsList.forEach(item => {
         if (item.checked == 1) {
@@ -102,10 +152,9 @@ export default {
   },
   methods: {
     // 获取购物车列表
-    getCartList() {
-       
-      axios({
-        url: url.getCartList,
+    getCartList () {
+      this.$axios({
+        url: this.$serverUrl.getCartList,
         method: "GET",
         withCredentials: true
       })
@@ -123,30 +172,30 @@ export default {
     },
 
     //全选 取消全选
-    checkAll() {
+    checkAll () {
       let flag = !this.checkAllFlag;
       this.GoodsList.forEach(item => {
         item.checked = flag;
       });
-      axios({
-        url: url.checkAll,
+      this.$axios({
+        url: this.$serverUrl.checkAll,
         method: "POST",
         withCredentials: true,
         data: {
           checkAllFlag: flag
         }
       })
-        .then(res => {})
+        .then(res => { })
         .catch(err => {
           console.log(err);
           Toast.fail("操作失败");
         });
     },
     // 商品选中
-    goodsCheck(item) {
+    goodsCheck (item) {
       item.checked = item.checked ? 0 : 1;
-      axios({
-        url: url.goodsCheck,
+      this.$axios({
+        url: this.$serverUrl.goodsCheck,
         method: "POST",
         data: {
           goodsId: item.ID,
@@ -155,7 +204,7 @@ export default {
         withCredentials: true
       })
         .then(res => {
-          
+
         })
         .catch(err => {
           console.log(err);
@@ -163,9 +212,9 @@ export default {
         });
     },
     // 删除商品
-    delGoods(id) {
-      axios({
-        url: url.delGoods,
+    delGoods (id) {
+      this.$axios({
+        url: this.$serverUrl.delGoods,
         method: "POST",
         data: {
           goodsId: id
@@ -174,7 +223,6 @@ export default {
       })
         .then(res => {
           if (res.data.code == 200 && res.data.message) {
-            // Toast.success("删除成功");
             this.getCartList();
             this.getcartCount();
           } else {
@@ -186,71 +234,61 @@ export default {
         });
     },
     //改变商品数量
-    changeNum(flag, item) {
+    changeNum (flag, item) {
+
       let productNum = parseInt(item.productNum);
-      let goodsId = item.ID;
+      let isok = true;
       if (flag == "add") {
         productNum = ++item.productNum;
-      } else if (flag == "minus") {
-        if (productNum > 1) {
-          productNum = --item.productNum;
-        } else {
-          item.productNum = 1;
-        }
+      } else if (flag == "minus" && productNum > 1) {
+        productNum = --item.productNum;
+      } else if (flag == 'focus' && productNum > 1) {
+        productNum = item.productNum;
       } else {
-        if (productNum > 1) {
-          productNum = item.productNum;
-        } else {
-          item.productNum = 1;
-        }
+        item.productNum = 1
+        isok = false
       }
-      axios({
-        url: url.changeGoodsNum,
-        method: "POST",
-        data: {
-          goodsId: goodsId,
-          goodsNum: productNum
-        },
-        withCredentials: true
-      })
-        .then(res => {
-          if (res.data.code == 200 && res.data.message) {
-            // this.getCartList();
-            this.getcartCount();
-          } else {
-          }
+
+      // 如果数量<=1则不发送请求
+      if (isok) {
+        this.$axios({
+          url: this.$serverUrl.changeGoodsNum,
+          method: "POST",
+          data: {
+            goodsId: item.ID,
+            goodsNum: productNum
+          },
+          withCredentials: true
         })
-        .catch(err => {
-          console.log(err);
-          Toast.fail("商品数量更新失败");
-        });
+          .then(res => {
+            if (res.data.code == 200 && res.data.message) {
+              this.getcartCount()
+            } else {
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            Toast.fail("商品数量更新失败");
+          });
+      }
+
     },
     // 获取购物车数量
-    getcartCount() {
-      axios({
-        url: url.getCartCount,
-        method: "get",
-        withCredentials: true
-      }).then(res => {
-        if (res.data.code == 200 && res.data.message) {
-          this.$store.commit("initCartCount", res.data.message);
-        } else {
-          this.$store.commit("initCartCount", 0);
-        }
-      });
+    getcartCount () {
+      this.$store.dispatch('getCartCount')
     },
     // 跳转结算页
-    toOrder() {
+    toOrder () {
       if (this.checkCount.CheckNum > 0) {
         this.$router.push({ name: "Order" });
       }
     },
     // 购物车无商品时跳转商城页面
-    goShop() {
+    goShop () {
       this.$router.push("/shop");
     },
     // 获取cookie
-    getLoginStatus() {
+    getLoginStatus () {
       return document.cookie.indexOf("userId") > -1 ? true : false;
     }
   }
@@ -266,6 +304,7 @@ export default {
   font-size: 20px;
   color: #999;
 }
+// 商品列表
 .cart-list {
   padding-bottom: 120px;
   li {
@@ -301,6 +340,7 @@ export default {
     }
   }
 }
+// 底部商品总价计算
 .fixed-btm {
   position: fixed;
   left: 0;
@@ -343,6 +383,7 @@ export default {
     }
   }
 }
+// 改变商品数量
 .stepper {
   display: flex;
   text-align: center;
@@ -387,6 +428,7 @@ export default {
     text-align: center;
   }
 }
+//无数据
 .no-data {
   position: absolute;
   top: 17%;
