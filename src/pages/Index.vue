@@ -107,13 +107,13 @@ export default {
     return {
       bannerList: [
         {
-          src: "http://picapp.jhrx.cn/_20180821175720_5b7be20051ac5.png",
-          intro: "【收藏】仙桃汽车客运总站，客车班次时刻表，你一定用的着！"
+          src: require('../assets/images/banner1.jpg'),
+          intro: "小龙虾全场满299减60"
         },
         {
-          src: "http://picapp.jhrx.cn/_20180806174405_5b68186589d0d.png",
+          src: require('../assets/images/banner2.jpg'),
           intro:
-            "【仙桃抖音达人征集令】超多奖品等你拿！戏精们“放肆”抖抖抖抖起来~"
+            "天天海鲜 天天特价"
         }
       ],
       categoryData: [], //栏目数据

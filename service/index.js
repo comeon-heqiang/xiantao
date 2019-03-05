@@ -54,4 +54,3 @@ app.use(router.allowedMethods()); //使用路由所有方法
 app.listen(3000, () => {
   console.log("服务器启动,端口号3000")
 })
-// echo "/root/usr/local/mongodb-linux/bin/mongod --dbpath=/root/data/mongo/data –logpath=/root/data/mongo/logs –logappend  --auth -–port=27017" >> /etc/rc.local

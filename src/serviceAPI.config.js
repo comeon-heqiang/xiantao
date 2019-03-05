@@ -1,5 +1,4 @@
 const LOCALURL = process.env.API_ROOT; //生产环境与线上环境地址
-// console.log(process.env.API_ROOT)
 
 let URL = {
   register: LOCALURL + 'user/register', //用户注册
@@ -35,6 +34,7 @@ let URL = {
   getOrderInfo: LOCALURL + 'user/getOrderInfo', //获取订单信息
   getContact: LOCALURL + 'contact', //获取联系信息
   editContact: LOCALURL + 'contact/editContent', //编辑联系信息  
-  opinion: LOCALURL + 'opinion/message' //提交反馈  
+  opinion: LOCALURL + 'opinion/message', //提交反馈  
+  upload:LOCALURL + 'user/upload' //个人中心上传头像
 }
 module.exports = URL;

@@ -10,8 +10,8 @@
           <img :src="userInfo.userPic" v-if="userInfo.userPic">
           <img src="../assets/images/userPic.png" v-else>
         </div>
-        <!-- VueCoreImageUpload -->
-        <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" url="/apis/user/upload"></vue-core-image-upload>
+        <!-- VueCoreImageUpload -->        
+        <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" :url="url.upload"></vue-core-image-upload>
         <!-- <vue-core-image-upload @imageuploaded="uploadImage" text="选择头像" class="upload-component" crop="local" cropRatio="1:1" :maxWidth="150" :maxHeight="150" inputAccept='image/jpg,image/jpeg' :isXhr="true" :maxFileSize="5242880" inputOfFile="file" url="http://localhost:3000/user/upload"></vue-core-image-upload> -->
         <van-icon name="arrow"></van-icon>
       </li>
@@ -63,6 +63,7 @@
 import NavBar from "@/components/NavBar";
 import util from "@/util/util";
 import area from "@/data/area";
+import url from '@/serviceAPI.config'
 import VueCoreImageUpload from "@/components/vue-core-image-upload.vue";
 export default {
   data() {
@@ -72,9 +73,10 @@ export default {
       currentDate: new Date(),
       maxDate: new Date(),
       dateShow: false, //日期选择显示
-      areaShow: false, //省市区弹窗显示
+      areaShow: false, // 省市区弹窗显示
       areaCode: "",
-       minDate: new Date(1950,1,1),
+      url:url,
+       minDate: new Date(1950,1,1)
     };
   },
   mounted() { 

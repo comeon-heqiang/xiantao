@@ -235,7 +235,6 @@ export default {
     },
     //改变商品数量
     changeNum (flag, item) {
-
       let productNum = parseInt(item.productNum);
       let isok = true;
       if (flag == "add") {
